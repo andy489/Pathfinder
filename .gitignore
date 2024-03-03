@@ -28,7 +28,10 @@ gradle-app.setting
 *.war
 *.ear
 
+# Gradle
 build/
 gradlew
+gradle/
 gradlew.bat
 HELP.md
+settings.gradle

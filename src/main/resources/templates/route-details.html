@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:insert="~{fragments/commons::head}"></head>
+
+<script defer th:src="@{/js/api/map-box-gl.js}"></script>
+<link defer th:href="@{/css/api/map-box-gl.css}" rel="stylesheet">
+
+<script defer th:src="@{/js/custom/comments.js}"></script>
+<script defer th:src="@{/js/custom/map.js}"></script>
+
+<!--https://developers.google.com/fonts/docs/material_symbols-->
+<!--https://fonts.google.com/icons-->
+<link defer th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200}"
+      rel="stylesheet"/>
+<link defer th:href="@{/css/custom/pulse.css}" rel="stylesheet"/>
+<body>
+
+<div class="wrapper">
+
+    <header th:replace="~{fragments/commons::navigation}"></header>
+
+    <input type="hidden" name="routeId" id="curr-route-id" th:value="${routeDetails.id}">
+
+    <div class="details-main"
+         th:object="${routeDetails}">
+        <section class="route-info text-center">
+
+            <h4 id="track-name" th:text="*{name}"></h4>
+            <p>
+                <span class="material-symbols-outlined pulse">hiking</span>
+                Total distance:
+                <span id="totalDistance"></span>&nbsp;km
+            </p>
+            <p>
+                <span class="material-symbols-outlined pulse">face</span>
+                Author :
+                <span id="authorName" th:text="' ' + *{authorName}">{Author Name}</span>
+            </p>
+            <h4>Difficulty Level (1-3):</h4>
+
+            <div class="level">
+                <p>
+                    <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
+                </p>
+                <p th:if="*{level.name() == 'INTERMEDIATE'}">
+                    <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
+                </p>
+                <th:block th:if="*{level.name() == 'ADVANCED'}">
+                    <p>
+                        <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
+                    </p>
+                    <p>
+                        <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
+                    </p>
+                </th:block>
+
+            </div>
+
+
+            <div sec:authorize="isAuthenticated()">
+                <h4>Choose picture</h4>
+                <form th:action="@{/images/upload}"
+                      th:method="post"
+                      enctype="multipart/form-data">
+                    <input type="hidden" name="routeId" id="route-id" th:value="*{id}">
+                    <div class="image-upload">
+                        <label for="picture" class="upload-pic">
+                            <img th:src="@{/images/add-img.png}" src="" alt=""/>
+                        </label>
+                        <input style="display: none"
+                               id="picture"
+                               type="file"
+                               name="picture"
+                               accept="image/jpeg,image/jpg,image/png"
+                               required/>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn-primary upload-hover rounded">Upload Picture</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="form-group" sec:authorize="!isAuthenticated()">
+                <a type="button" class="btn upload-hover text-white" id="login-to-upload-pic" th:href="@{/users/login}">
+                    Register or Login to Upload Picture
+                </a>
+            </div>
+
+
+        </section>
+
+        <section id="map"></section>
+
+        <section id="video">
+            <iframe id="frame" th:src="@{'https://www.youtube.com/embed/' + *{videoUrl}}">
+            </iframe>
+        </section>
+
+        <section class="route-description text-center">
+            <h4>Description</h4>
+            <p id="route-description" class="text-left" th:text="*{description}">Description: </p>
+        </section>
+
+        <section class="gallery">
+            <img class="rounded" th:each="p : *{pictureUrls}" th:src="@{${p}}" height="100%" th:alt="*{name}" alt="">
+        </section>
+
+        <section class="comments">
+            <h1>Comments</h1>
+
+            <div>
+                <form id="comment-form"
+                      th:method="post"
+                      th:action="@{/api/comment}">
+
+
+                    <div class="form-group" sec:authorize="isAuthenticated()">
+                        <h4>Leave a comment</h4>
+
+                        <label for="comment">Message</label>
+                        <textarea name="comment"
+                                  id="comment"
+                                  cols="30"
+                                  rows="5"
+                                  class="form-control"
+                                  style="background-color: white;">
+                        </textarea>
+
+                        <small id="messageError" class="invalid-feedback">
+                            Message should be at least 10 characters.
+                        </small>
+                    </div>
+
+                    <div class="form-group" sec:authorize="isAuthenticated()">
+                        <input type="submit"
+                               class="btn"
+                               id="post-comment"
+                               value="Post Comment"/>
+                    </div>
+                    <div class="form-group" sec:authorize="!isAuthenticated()">
+                        <a type="button" class="btn upload-hover text-white" id="login-to-upload-comment"
+                           th:href="@{/users/login}">
+                            Register or Login to Comment
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+
+            <div>
+                <span id="comment-control-section"></span>
+            </div>
+        </section>
+
+        <p style="visibility: hidden">GPX Download:
+            <a id="gpx-download"></a>
+        </p>
+
+    </div>
+
+</div>
+<footer th:replace="~{fragments/commons::footer}">
+</footer>
+
+</body>
+</html>

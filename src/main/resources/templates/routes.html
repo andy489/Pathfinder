@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/commons::head}"></head>
+
+<body>
+<div class="wrapper">
+    <header th:replace="~{fragments/commons::navigation}"></header>
+
+    <section class="road"
+             th:each="r : ${allRoutesViewModel}"
+             th:object="${r}">
+
+        <img th:src="*{pictureUrl}" alt="Title image">
+
+        <div style="height:400px; overflow:auto;">
+            <h2 th:text="*{name}">
+                Your Route
+            </h2>
+
+            <p th:text="*{#strings.abbreviate(description, 600)}">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Vitae alias reiciendis deleniti possimus nemo non repellendus?
+                Quae atque vero modi quidem! Autem cupiditate fugit doloribus ad amet,
+                asperiores provident commodi.
+            </p>
+            <a th:href="@{/routes/details/{id}(id = *{id})}" class="btn">Learn More</a>
+        </div>
+    </section>
+
+</div>
+
+</body>
+
+<footer th:replace="~{fragments/commons::footer}"></footer>
+
+</html>

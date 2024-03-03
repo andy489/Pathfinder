@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/commons::head}"></head>
+
+<body>
+
+<main class="p-5 align-content-center bg-blur my-register-div">
+
+    <header th:replace="~{fragments/commons::navigation}"></header>
+
+    <h1 class="border-bottom mb-5">Login</h1>
+    <div class="d-flex justify-content-center">
+        <div class="row g-3 align-items-center">
+
+            <form th:action="${loginProcessingUrl}"
+                  th:method="post">
+                <div>
+                    <div class="col-auto">
+                        <label for="input-username" class="col-form-label ">Username</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text"
+                               name="username"
+                               th:value="${username}"
+                               id="input-username"
+                               class="form-control"
+                               aria-describedby="usernameHelpInline"/>
+                    </div>
+                </div>
+                <div>
+                    <div class="col-auto">
+                        <label for="input-password" class="col-form-label ">Password</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="password"
+                               name="password"
+                               id="input-password"
+                               class="form-control"
+                               aria-describedby="passwordHelpInline"/>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="col-auto">
+                        <input id="remember-me" type="checkbox" name="remember-me-par">
+                        <label for="remember-me" class="col-form-label">Remember Me</label>
+                    </div>
+                </div>
+
+                <p th:if="${bad_credentials}"
+                   class="errors alert alert-danger">
+                    Invalid username or password.
+                </p>
+
+                <div class="d-flex justify-content-center mt-2">
+                    <button class="btn btn-primary btn-block w-50" type="submit">Login</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/commons::footer}"></footer>
+
+</body>
+
+</html>

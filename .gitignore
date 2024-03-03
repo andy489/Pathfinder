@@ -25,7 +25,6 @@ gradle-app.setting
 
 # JAVA
 *.class
-*.jar
 *.war
 *.ear
 

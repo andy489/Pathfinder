@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/commons::head}"></head>
+
+<body>
+<div class="wrapper">
+    <!-- Navigation -->
+    <header th:replace="~{fragments/commons::navigation}"></header>
+
+    <!-- Top Container -->
+    <section class="top-container">
+        <div class="showcase">
+            <!--            <p th:text="'Welcome, ' + (${@currentUser.isLoggedIn()} ? ${@currentUser.getUsername()} : 'Stranger') ">-->
+            <!--                {Welcome, user}</p>-->
+            <h1>Find amazing routes</h1>
+            <p>Sick of staying at home, sick of limitations? Be free! Find a route and enjoy nature!</p>
+            <a th:href="@{/routes/all}" class="btn">To routes</a>
+        </div>
+
+        <div class="top-box top-box-a">
+            <h4>Времето в София</h4>
+            <h4>
+                <span id="box-a-temp">{15}</span>
+                <span>&#8451;</span>
+            </h4>
+            <img id="box-a-img" th:src="@{/images/sun.png}" height="150px" alt="" src="">
+        </div>
+
+        <div class="top-box top-box-b">
+            <h4>Времето в Созопол</h4>
+            <h4>
+                <span id="box-b-temp">{27}</span>
+                <span>&#8451;</span>
+            </h4>
+            <img id="box-b-img" th:src="@{/images/cloudy.png}" height="150px" alt="" src="">
+        </div>
+    </section>
+
+    <!-- Boxes Section -->
+    <section class="boxes">
+        <a th:href="@{/routes/pedestrian}" class="main-btn">
+            <div class="box">
+                <img th:src="@{/images/pedestrian.png}" height="150px" alt="" src="">
+                <h3>Pedestrian</h3>
+                <p>Is this your Leg day?</p>
+            </div>
+        </a>
+
+        <a th:href="@{/routes/bicycle}" class="main-btn">
+            <div class="box">
+                <img th:src="@{/images/bicycle.png}" height="150px" alt="" src="">
+                <h3>Bicycle</h3>
+                <p>When you want to be one with nature!</p>
+            </div>
+        </a>
+
+        <a th:href="@{/routes/motorcycle}" class="main-btn">
+            <div class="box">
+                <img th:src="@{/images/motorcycle.png}" height="150px" alt="" src="">
+                <h3>Motorcycle</h3>
+                <p>When you want the wind to blow on your face!</p>
+            </div>
+        </a>
+
+        <a th:href="@{/routes/car}" class="main-btn">
+            <div class="box">
+                <img th:src="@{/images/car.png}" height="150px" alt="" src="">
+                <h3>Car</h3>
+                <p>Going on a trip with friends?</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- Info Section -->
+    <section class="road">
+        <img th:src="${mostCommentedRoute.imageUrl}" alt="">
+        <div>
+            <h2>The most commented route:</h2>
+            <h1 th:text="${mostCommentedRoute.name}"></h1>
+            <h6>Read more about the most commented route and do not miss the
+                chance to visit it and give your opinion to help other users.</h6>
+
+            <a th:href="@{/routes/details/{routeId}(routeId=${mostCommentedRoute.id})}" class="btn">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section class="gallery" style="height:210px; overflow:auto">
+        <img th:each="p : ${sampleRoutePictures}" th:src="${p}" width="200px" height="200px" alt="">
+    </section>
+
+
+    <script defer th:src="@{/js/custom/weather.js}"></script>
+</div>
+
+</body>
+
+<footer th:replace="~{fragments/commons::footer}"></footer>
+
+</html>

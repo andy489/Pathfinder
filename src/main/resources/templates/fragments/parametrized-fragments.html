@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="title (type, count, id)"
+     class="mx-auto mt-3 mb-0 px-3 py-2 text-center text-white border border-white modal-background">
+    <span class="m-0 h3 col-6" th:text="${type}">{type}</span>
+    <span class="col-6 text-warning" th:attr="id=${id}" th:text="'total: [' + ${count} + ']'">{total: n}</span>
+</div>
+
+<div th:fragment="admin-table-comments (data, approved, prefix)"
+     class="accordion"
+     th:attr="id=${prefix} + '-accordion-parent'">
+    <div th:if="${approved}"
+         class="card" th:each="kv: ${data}"
+         th:with="routeId = ${kv.value.routeId}">
+
+        <div th:replace="~{fragments/parametrized-fragments::route-comment-header (routeId=${routeId},
+        routeName=${kv.key}, prefix='old', count=${kv.value.approvedComments.size()})}"></div>
+        <div th:if="${approved}"
+             th:replace="~{fragments/parametrized-fragments::comments-collapse (routeId=${routeId},
+             comments=${kv.value.approvedComments}, prefix='old', routeName=${kv.key})}">
+
+        </div>
+    </div>
+
+    <div th:unless="${approved}"
+         class="card" th:each="kv: ${data}"
+         th:with="routeId = ${kv.value.routeId}">
+
+        <div th:replace="~{fragments/parametrized-fragments::route-comment-header (routeId=${routeId},
+        routeName=${kv.key}, prefix='new', count=${kv.value.newComments.size()})}"></div>
+        <div th:if="${approved}"
+             th:replace="~{fragments/parametrized-fragments::comments-collapse (routeId=${routeId},
+             comments=${kv.value.newComments}, prefix='new', routeName=${kv.key})}">
+
+        </div>
+    </div>
+</div>
+
+
+<div th:fragment="route-comment-header (routeId, routeName, prefix, count)"
+     class="section-header"
+     th:attr="id=${prefix} + '-route-' + ${routeId}">
+    <h3 class="mb-0 border border-info rounded mt-1">
+        <button class="btn btn-link" type="button" data-toggle="collapse"
+                aria-expanded="true"
+                th:attr="id='header-' + ${prefix} + '-' + ${routeId},
+                data-target='#' + ${prefix} + '-collapse-' + ${routeId},
+                aria-controls=${prefix} + '-collapse-' + ${routeId},
+                onclick=|toggleArrowComments(this.id)|">
+
+            <span class="title-collapse" th:text="${routeName}">{Route Name}</span>
+            <span class="material-symbols-outlined pulse p-0"
+                  th:attr="id='chevron-arrow-' + ${prefix} + '-' + ${routeId}"
+                  th:classappend="'chevron-' + ${prefix}">chevron_right</span>
+            <span class="material-symbols-outlined pulse p-0 d-none"
+                  th:attr="id='expand-arrow-' + ${prefix} + '-' + ${routeId}"
+                  th:classappend="'expand-' + ${prefix}">expand_more</span>
+            <span class="col-2 text-warning" th:attr="id=${prefix} + '-curr-route-' + ${routeId}"
+                  th:text="'[' + ${count} + ']'">{count}</span>
+
+        </button>
+    </h3>
+</div>
+
+<div th:fragment="comments-collapse (routeId, comments, prefix, routeName)"
+     class="collapse"
+     th:attr="id=${prefix} + '-collapse-' + ${routeId},
+     aria-labelledby=${prefix} + '-route-' + ${routeId},
+     data-parent='#' + ${prefix} +'-accordion-parent'">
+
+    <div th:classappend="${comments.size()} > 0 ? '': 'd-none'">
+        <div th:replace="~{fragments/commons::table-info}"></div>
+    </div>
+
+    <div class="card-body p-1"
+         th:each="c: ${comments}">
+        <table class="table table-striped table-primary table-bordered table-hover m-0 align-text-bottom"
+               th:attr="id=${prefix} + '-comment-' + ${c.getCommentId()}">
+
+            <tr>
+                <td class="col-2" th:text="${c.getAuthorName()}">{Sample User}</td>
+                <td class="col-7" th:text="${c.getComment()}">
+                    {This path is great! Would like to visit it.}
+                </td>
+                <td class="col-1" th:text="${#temporals.format(c.getCreated(), 'dd/MM/yyyy, HH:mm:ss')}">
+                    {23/03/2023}
+                </td>
+                <td class="col-2">
+                    <div class="justify-content-center d-flex">
+                        <div th:if="${prefix} == 'new'"
+                             class="form-btn btn-approve form-btn-single"
+                             th:attr="id=${prefix} + '-approve-' + ${c.getCommentId()},
+                         onclick=|approveRejectCommentJS(this.id, ${routeId})|">
+                            <button class="btn bg-success font-weight-bold mr-1 px-1 py-0 border border-light">
+                                Approve
+                            </button>
+                        </div>
+
+                        <div th:if="${prefix} == 'old'"
+                             class="form-btn btn-approve form-btn-single"
+                             th:attr="id=${prefix} + '-reject-' + ${c.getCommentId()},
+                         onclick=|approveRejectCommentJS(this.id, ${routeId})|">
+                            <button class="btn bg-warning font-weight-bold mr-1 px-1 py-0 border border-light">
+                                Reject
+                            </button>
+                        </div>
+
+                        <div class="form-btn btn-delete form-btn-single ml-3"
+                             th:attr="id=${prefix} + '-delete-' + ${c.getCommentId()} + '-' + ${routeId}"
+                             onclick="deleteCommentJS(this.id)">
+                            <button class="btn bg-danger font-weight-bold px-1 py-0 border border-light">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+    <div class="card-body p-1" th:attr="id='actions-all-' + ${routeId}"
+         th:classappend="${comments.size()} > 0 ? '': 'd-none'">
+        <table class="table table-striped table-primary table-bordered table-hover m-0 align-text-bottom">
+            <tr>
+                <td class="col-6" th:if="${prefix} == 'new'">
+                    <div class="form-btn text-center">
+                        <button class="btn bg-success font-weight-bold mr-1 px-1 py-0 border border-light"
+                                data-toggle="modal" data-target="#modal-confirm"
+                                th:attr="id-transfer=${prefix} + '-reject-all-' + ${routeId}"
+                                data-func="approveRejectAllCommentsJS(this.id)"
+                                data-msg-action="approve"
+                                th:data-route="${routeName}">
+                            Approve All
+                        </button>
+                    </div>
+                </td>
+                <td class="col-6" th:if="${prefix} == 'old'">
+                    <div class="form-btn text-center">
+                        <button class="btn bg-warning font-weight-bold mr-1 px-1 py-0 border border-light"
+                                data-toggle="modal" data-target="#modal-confirm"
+                                th:attr="id-transfer=${prefix} + '-reject-all-' + ${routeId}"
+                                data-func="approveRejectAllCommentsJS(this.id)"
+                                data-msg-action="reject"
+                                th:data-route="${routeName}">
+                            Reject All
+                        </button>
+                    </div>
+                </td>
+                <td class="col-6">
+                    <div class="form-btn text-center">
+                        <button class="btn bg-danger font-weight-bold mr-1 px-1 py-0 border border-light"
+                                data-toggle="modal" data-target="#modal-confirm"
+                                th:attr="id-transfer=${prefix} + '-delete-all-' + ${routeId}"
+                                data-func="deleteAllCommentsJS(this.id)"
+                                data-msg-action="delete"
+                                th:data-route="${routeName}">
+                            Delete All
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--PERMISSIONS-->
+
+
+</body>
+</html>

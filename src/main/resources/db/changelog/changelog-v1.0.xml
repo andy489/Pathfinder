@@ -1,0 +1,386 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                                    http://www.liquibase.org/xml/ns/pro
+                                    http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd
+                                    http://www.liquibase.org/xml/ns/dbchangelog
+                                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- https://dba-presents.com/liquibase/216-liquibase-3-6-x-data-types-mapping-table -->
+
+    <changeSet author="andreystoev" id="1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="categories"/>
+            </not>
+        </preConditions>
+        <createTable tableName="categories">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_CATEGORIES" nullable="false"/>
+            </column>
+            <column name="category" type="ENUM('PEDESTRIAN','BICYCLE','MOTORCYCLE','CAR')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="comments"/>
+            </not>
+        </preConditions>
+        <createTable tableName="comments">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_COMMENTS" nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="approved" type="boolean"/>
+            <column name="created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="TEXT"/>
+            <column name="author_id" type="BIGINT"/>
+            <column name="route_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="messages"/>
+            </not>
+        </preConditions>
+        <createTable tableName="messages">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_MESSAGES" nullable="false"/>
+            </column>
+            <column name="date_time" type="datetime"/>
+            <column name="text" type="TEXT"/>
+            <column name="author_id" type="BIGINT"/>
+            <column name="recipient_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pictures"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pictures">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_PICTURES" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(1023)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="BIGINT"/>
+            <column name="route_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="roles"/>
+            </not>
+        </preConditions>
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_ROLES" nullable="false"/>
+            </column>
+            <column name="role" type="ENUM('REGULAR','MODERATOR','ADMIN')">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="routes"/>
+            </not>
+        </preConditions>
+        <createTable tableName="routes">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_ROUTES" nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="gpx_coordinates" type="LONGTEXT"/>
+            <column name="level" type="ENUM('BEGINNER','INTERMEDIATE','EXPERT')"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="video_url" type="VARCHAR(255)"/>
+            <column name="author_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="routes_categories"/>
+            </not>
+        </preConditions>
+        <createTable tableName="routes_categories">
+            <column name="route_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="PK_USERS" nullable="false"/>
+            </column>
+            <column name="birth_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="full_name" type="VARCHAR(255)"/>
+            <column name="level" type="ENUM('BEGINNER','INTERMEDIATE','EXPERT')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users_roles"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="andy489" id="10">
+        <addUniqueConstraint columnNames="name, author_id" constraintName="UniqueRouteNameAndAuthorUser"
+                             tableName="routes"/>
+    </changeSet>
+    <changeSet author="andy489" id="11">
+        <createIndex indexName="FK718folur1fr8yq7n1rg56us16" tableName="routes">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="12">
+        <createIndex indexName="FK9sbfb2rmhm4l35myhkhexfon3" tableName="pictures">
+            <column name="route_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="13">
+        <createIndex indexName="FKa62j07k5mhgifpp955h37ponj" tableName="users_roles">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="14">
+        <createIndex indexName="FKhdkwfnspwb3s60j27vpg0rpg6" tableName="messages">
+            <column name="recipient_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="15">
+        <createIndex indexName="FKk3vmpmcbl2rk8skwr6u88083p" tableName="comments">
+            <column name="route_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="16">
+        <createIndex indexName="FKn2na60ukhs76ibtpt9burkm27" tableName="comments">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="17">
+        <createIndex indexName="FKowtlim26svclkatusptbgi7u1" tableName="messages">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="18">
+        <createIndex indexName="FKpdb1r70ko3x4wfuwok01rdsnm" tableName="routes_categories">
+            <column name="category_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="19">
+        <createIndex indexName="FKrndue6dq3063584yvjmpa09jc" tableName="pictures">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andy489" id="20">
+        <addForeignKeyConstraint baseColumnNames="route_id" baseTableName="routes_categories"
+                                 constraintName="FK6i7atiqtucrnkovuv5c62g6pp" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="routes" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="21">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="routes"
+                                 constraintName="FK718folur1fr8yq7n1rg56us16" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="22">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="users_roles"
+                                 constraintName="FK7v417qhe0i2m9h8njggvciv00" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="23">
+        <addForeignKeyConstraint baseColumnNames="route_id" baseTableName="pictures"
+                                 constraintName="FK9sbfb2rmhm4l35myhkhexfon3" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="routes" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="24">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users_roles"
+                                 constraintName="FKa62j07k5mhgifpp955h37ponj" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="roles" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="25">
+        <addForeignKeyConstraint baseColumnNames="recipient_id" baseTableName="messages"
+                                 constraintName="FKhdkwfnspwb3s60j27vpg0rpg6" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="26">
+        <addForeignKeyConstraint baseColumnNames="route_id" baseTableName="comments"
+                                 constraintName="FKk3vmpmcbl2rk8skwr6u88083p" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="routes" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="27">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="comments"
+                                 constraintName="FKn2na60ukhs76ibtpt9burkm27" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="28">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="messages"
+                                 constraintName="FKowtlim26svclkatusptbgi7u1" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="29">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="routes_categories"
+                                 constraintName="FKpdb1r70ko3x4wfuwok01rdsnm" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="categories" validate="true"/>
+    </changeSet>
+    <changeSet author="andy489" id="30">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="pictures"
+                                 constraintName="FKrndue6dq3063584yvjmpa09jc" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+
+    <changeSet author="andy489" id="31">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/categories.csv" quotchar="&quot;"
+                  separator="," tableName="categories">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="category" name="category" type="STRING"/>
+            <column header="description" name="description" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="andy489" id="32">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/roles.csv" quotchar="&quot;" separator=","
+                  tableName="roles">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="role" name="role" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="andy489" id="33">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/users.csv" quotchar="&quot;" separator=","
+                  tableName="users">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="birth_date" name="birth_date" type="date"/>
+            <column header="email" name="email" type="STRING"/>
+            <column header="full_name" name="full_name" type="STRING"/>
+            <column header="level" name="level" type="STRING"/>
+            <column header="password" name="password" type="STRING"/>
+            <column header="username" name="username" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="andy489" id="34">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/routes.csv" quotchar="&quot;" separator=","
+                  tableName="routes">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="description" name="description" type="STRING"/>
+            <column header="gpx_coordinates" name="gpx_coordinates" type="STRING"/>
+            <column header="level" name="level" type="STRING"/>
+            <column header="name" name="name" type="STRING"/>
+            <column header="video_url" name="video_url" type="STRING"/>
+            <column header="author_id" name="author_id" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="andy489" id="35">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/comments.csv" quotchar="&quot;" separator=","
+                  tableName="comments">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="approved" name="approved" type="BOOLEAN"/>
+            <column header="comment" name="comment" type="STRING"/>
+            <column header="author_id" name="author_id" type="NUMERIC"/>
+            <column header="route_id" name="route_id" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="andy489" id="36">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/pictures.csv" quotchar="&quot;" separator=","
+                  tableName="pictures">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="title" name="title" type="STRING"/>
+            <column header="url" name="url" type="STRING"/>
+            <column header="author_id" name="author_id" type="NUMERIC"/>
+            <column header="route_id" name="route_id" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="andy489" id="37">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/users_roles.csv" quotchar="&quot;"
+                  separator="," tableName="users_roles">
+            <column header="user_id" name="user_id" type="NUMERIC"/>
+            <column header="role_id" name="role_id" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="andy489" id="38">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="my-data/routes_categories.csv" quotchar="&quot;"
+                  separator="," tableName="routes_categories">
+            <column header="route_id" name="route_id" type="NUMERIC"/>
+            <column header="category_id" name="category_id" type="NUMERIC"/>
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

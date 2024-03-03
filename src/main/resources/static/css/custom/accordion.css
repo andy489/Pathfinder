@@ -1,0 +1,49 @@
+.accordion .section-header {
+    padding: 0;
+}
+
+.accordion .section-header .btn-link {
+    display: block;
+    padding: .75rem 1.25rem;
+    width: 100%;
+    text-align: left;
+}
+
+.accordion .section-header .btn-link .fas {
+    float: right;
+    margin-top: 5px;
+}
+
+.accordion .section-header .btn-link[aria-expanded="true"] .fas {
+    transform: rotate(90deg);
+}
+
+.section-header:hover {
+    transition: 0.5s;
+    background-color: whitesmoke;
+}
+
+table.table tr td {
+    vertical-align: middle;
+}
+
+.form-btn {
+    width: auto;
+}
+
+.form-btn-single {
+    float: left;
+}
+
+.title-collapse {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.modal-background {
+    background-color: #126c88;
+}
+
+.btn.btn-link:hover {
+    text-decoration: none;
+}

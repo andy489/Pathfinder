@@ -1,0 +1,86 @@
+
+server:
+  error:
+    path: /error
+  port: 8080
+  tomcat:
+    max-swallow-size: -1
+spring:
+  main:
+    banner-mode: off
+#  cloud:
+#    vault:
+#      uri: http://127.0.0.1:8200
+#      token: hvs.CBJkEIngBjsD5AIHM2sRSCcH
+#      kv:
+#        enabled: true
+#      application-name: pathfinder
+#  config:
+#    import: vault://
+  datasource:
+    url: jdbc:mysql://localhost:3306/pathfinder?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USER:root}
+    password: ${DB_PASS:root}
+  thymeleaf: # Thymeleaf
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+  #    prefix: file:src/main/resources/templates/
+  liquibase:
+    enabled: true
+    change-log: classpath:changelog-master.xml
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 5MB
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true
+  sql:
+    init:
+      mode: never
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: false
+
+# kill (politely) process working on port:
+# sudo lsof -i -P -n | grep 8080
+# kill -l
+# kill -15 <pid>
+
+# create xml changelog from existing db:
+# liquibase --url=jdbc:mysql://localhost:3306/pathfinder --username=root --password=root --classpath=lib/mysql-connector-j-8.0.32.jar --changeLogFile=auto-gen-changelog.mysql.xml generateChangeLog
+# equiv from resources dir (where there is liquibase.properties config file) run:
+# liquibase generateChangeLog
+# liquibase generate-changelog --diffTypes=tables,columns,data --dataOutputDirectory=myData --changelog-file=output_changelog.xml
+
+user:
+  register:
+    min-age: 12
+route:
+  youtube:
+    code:
+      size: 11
+
+pathfinder:
+  remember-me-key: ${REMEMBER_ME_KEY:topsecret}
+  encode: false
+  passwords-count: 50
+
+#  https://bgmountains.org/bg/
+
+cloudinary:
+  cloud-name: ${CLOUD_NAME:dmpzzernt}
+  api-key: ${CLOUD_API_KEY:629921682546998}
+  api-secret: ${CLOUD_API_SECRET:n9puCj4chO9_jOjLdGCrGTOR9ww}
+  secure: true
+
+# https://www.mockaroo.com/ <- generate mock data to test app

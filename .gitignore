@@ -19,3 +19,17 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Mac OS
+.DS_Store
+
+# JAVA
+*.class
+*.jar
+*.war
+*.ear
+
+build/
+gradlew
+gradlew.bat
+HELP.md

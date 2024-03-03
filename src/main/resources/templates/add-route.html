@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/commons::head}"></head>
+
+<body>
+
+<header th:replace="~{fragments/commons::navigation}"></header>
+
+<!-- Top Container -->
+<div
+     class="row justify-content-center ">
+    <form id="add-route-form" class="w-50 rounded text-white mt-5"
+          th:action="@{/routes/add}"
+          th:method="post"
+          th:object="${routeAddModel}"
+          enctype="multipart/form-data">
+
+        <h3 class="border-light pl-2">Add a new route</h3>
+        <div>
+            <div class="form-group">
+                <label for="inputName" class="col-form-label ">Name</label>
+            </div>
+            <div class="form-group">
+                <input th:field="*{name}"
+                       th:errorclass="'is-invalid bg-danger'"
+                       type="text"
+                       id="inputName"
+                       class="form-control"
+                       aria-describedby="inputNameError">
+
+                <div class="invalid-feedback errors alert alert-danger">
+                    <div th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label for="inputDescription" class="col-form-label ">Description</label>
+            </div>
+            <div class="form-group">
+                    <textarea th:field="*{description}"
+                              th:errorclass="'is-invalid bg-danger'"
+                              id="inputDescription"
+                              class="form-control"
+                              aria-describedby="inputDescriptionError">
+
+                    </textarea>
+
+                <div class="invalid-feedback errors alert alert-danger">
+                    <div th:each="err : ${#fields.errors('description')}" th:text="${err}"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label for="inputGpx" class="col-form-label ">GPX Coordinates</label>
+            </div>
+            <div class="form-group">
+                <input type="file"
+                       th:field="*{gpxCoordinates}"
+                       th:errorclass="'is-invalid bg-danger'"
+                       id="inputGpx"
+                       class="form-control-file"
+                       aria-describedby="inputGpxError">
+
+                <small th:errors="*{gpxCoordinates}" class="form-text errors alert alert-danger">
+                    {Invalid file format}
+                </small>
+
+                <small th:if="${multipartExceed != null}" th:text="${multipartExceed}"
+                       class="form-text errors alert alert-danger is-invalid bg-danger">
+                    {multipart file size exceeded}
+                </small>
+
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label for="level">Level</label>
+                <select id="level" class="custom-select"
+                        th:field="*{level}"
+                        th:errorclass="'is-invalid bg-danger'">
+                    <option value="">- Select level -</option>
+                    <option th:each="l : ${T(com.path.pathfinder.model.enumerated.LevelEnum).values()}"
+                            th:text="${l}"
+                            th:value="${l}"
+                            th:selected="${l} == *{level}">
+                        Select level
+                    </option>
+                </select>
+
+                <div class="invalid-feedback errors alert alert-danger">
+                    <div th:each="err : ${#fields.errors('level')}" th:text="${err}"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label for="videoUrl">Video Url (only last eleven characters from YouTube)</label>
+                <input id="videoUrl" type="text"
+                       th:field="*{videoUrl}"
+                       th:errorclass="'is-invalid bg-danger'"
+                       class="form-control" placeholder="Video url">
+
+                <div class="invalid-feedback errors alert alert-danger">
+                    <div th:each="err : ${#fields.errors('videoUrl')}" th:text="${err}"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group p-3">
+                <label class="p-2" for="categories">Categories:</label>
+                <input class="m-3"
+                       th:field="*{categories}"
+                       th:each="c : ${T(com.path.pathfinder.model.enumerated.RouteCategoryEnum).values()}"
+                       th:text="${c.getDisplayName()}"
+                       th:value="${c}"
+                       type="checkbox"
+                       id="categories">
+
+                <small th:errors="*{categories}" class="row alert-danger alert"></small>
+
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-primary btn-block w-50" type="submit">Add Route</button>
+        </div>
+
+    </form>
+
+</div>
+
+<footer th:replace="~{fragments/commons::footer}"></footer>
+
+</body>
+
+</html>

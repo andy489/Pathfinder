@@ -45,8 +45,8 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0.Beta1'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-test'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'org.springframework.security:spring-security-test'
 
     implementation 'com.cloudinary:cloudinary-core'
     implementation 'com.cloudinary:cloudinary-http44:1.35.0'

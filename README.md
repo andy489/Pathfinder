@@ -50,6 +50,28 @@ Your application and database tools (like Sequel Ace) can connect using:
 - Stop everything: `docker-compose down`
 - View database logs: `docker-compose logs mysql`
 
-<div align="center">
-  <img src=".assets/01.png" alt="Description" width="400">
+
+## Home Page
+<div style="text-align: center; width: 720px;">
+  <img src="./assets/01.png" alt="home page">
+</div>
+
+## Route Details
+<div style="text-align: center; width: 720px;">
+  <img src="./assets/02.png" alt="route details">
+</div>
+
+## All Routes
+<div style="text-align: center; width: 720px;">
+  <img src="./assets/03.png" alt="all routes">
+</div>
+
+## Admin Panel: Comments Management
+<div style="text-align: center; width: 720px;">
+  <img src="./assets/04.png" alt="admin panel:comments">
+</div>
+
+## Admin Panel: Permissions (Roles) Management
+<div style="text-align: center; width: 720px;">
+  <img src="./assets/05.png" alt="admin panel:permissions">
 </div>

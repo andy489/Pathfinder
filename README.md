@@ -49,3 +49,7 @@ Your application and database tools (like Sequel Ace) can connect using:
 ## Managing Services
 - Stop everything: `docker-compose down`
 - View database logs: `docker-compose logs mysql`
+
+<div align="center">
+  <img src=".assets/01.png" alt="Description" width="400">
+</div>

@@ -31,7 +31,15 @@ networks:
   app-network:
     driver: bridge
 
+# open -a docker
 # docker-compose up -d
 ## docker-compose --env-file .env up -d
 # docker logs mysql
 # docker-compose down
+
+#Connect to MySQL in Sequel Ace with these settings:
+#Host: 127.0.0.1
+#Port: 3306
+#Username: ${DB_USER} (from your .env file)
+#Password: ${DB_PASS} (from your .env file)
+#Database: pathfinder

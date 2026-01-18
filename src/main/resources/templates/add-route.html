@@ -87,7 +87,7 @@
                         th:field="*{level}"
                         th:errorclass="'is-invalid bg-danger'">
                     <option value="">- Select level -</option>
-                    <option th:each="l : ${T(com.path.pathfinder.model.enumerated.LevelEnum).values()}"
+                    <option th:each="l : ${T(com.pathfinder.model.enumerated.LevelEnum).values()}"
                             th:text="${l}"
                             th:value="${l}"
                             th:selected="${l} == *{level}">
@@ -122,7 +122,7 @@
                 <label class="p-2" for="categories">Categories:</label>
                 <input class="m-3"
                        th:field="*{categories}"
-                       th:each="c : ${T(com.path.pathfinder.model.enumerated.RouteCategoryEnum).values()}"
+                       th:each="c : ${T(com.pathfinder.model.enumerated.RouteCategoryEnum).values()}"
                        th:text="${c.getDisplayName()}"
                        th:value="${c}"
                        type="checkbox"

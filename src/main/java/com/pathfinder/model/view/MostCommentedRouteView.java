@@ -3,7 +3,7 @@ package com.pathfinder.model.view;
 import com.pathfinder.model.entity.CommentEntity;
 import com.pathfinder.model.entity.PictureEntity;
 import com.pathfinder.model.entity.RouteEntity;
-import com.pathfinder.service.RouteService;
+import com.pathfinder.util.AppConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,8 +31,8 @@ public class MostCommentedRouteView {
         return MostCommentedRouteView.of(
                 routeEntity.getId(),
                 routeEntity.getName(),
-                routeEntity.getPictures().stream().map(PictureEntity::getUrl).findAny().orElseGet(
-                        () -> RouteService.DEFAULT_PIC_URL),
+                routeEntity.getPictures().stream().map(PictureEntity::getUrl).findAny()
+                        .orElse(AppConstants.DEFAULT_PIC_URL),
                 routeEntity.getComments().stream().filter(c -> Boolean.TRUE.equals(c.getApproved())).count()
         );
     }

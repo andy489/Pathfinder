@@ -79,4 +79,5 @@ tasks.named('bootRun') {
 tasks.named('test') {
     useJUnitPlatform()
     systemProperties System.properties
+    jvmArgs '-Dnet.bytebuddy.experimental=true'
 }

@@ -77,7 +77,8 @@ public class SuperuserService {
             approved.sort(Comparator.comparing(CommentView::getCreated, Comparator.reverseOrder()));
             pending.sort(Comparator.comparing(CommentView::getCreated, Comparator.reverseOrder()));
 
-            routeComments.put(r.getName(), new RouteCommentsPartitionDto(r.getId(), approved, pending));
+            // keyed by id (String) so routes with identical names don't collide
+            routeComments.put(String.valueOf(r.getId()), new RouteCommentsPartitionDto(r.getId(), approved, pending));
         }
 
         return new AdminCommentView()
@@ -153,18 +154,19 @@ public class SuperuserService {
 
     @Transactional
     public void togglePermUser(Long userId, UserRoleEnum from, UserRoleEnum to) {
-        UserEntity referenceById = userRepository.getReferenceById(userId);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new java.util.NoSuchElementException("User not found: " + userId));
 
-        if (referenceById.containsRole(from)) {
-            referenceById.remove(from);
+        if (user.containsRole(from)) {
+            user.remove(from);
         }
 
         Optional<RoleEntity> roleEntityByRole = roleRepository.findRoleEntityByRole(to);
-        roleEntityByRole.ifPresent(referenceById::addRole);
+        roleEntityByRole.ifPresent(user::addRole);
 
-        if (!referenceById.containsRole(UserRoleEnum.REGULAR)) {
+        if (!user.containsRole(UserRoleEnum.REGULAR)) {
             roleEntityByRole = roleRepository.findRoleEntityByRole(UserRoleEnum.REGULAR);
-            roleEntityByRole.ifPresent(referenceById::addRole);
+            roleEntityByRole.ifPresent(user::addRole);
         }
     }
 }

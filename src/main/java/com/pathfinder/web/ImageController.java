@@ -50,6 +50,11 @@ public class ImageController extends GenericController {
         Object secureUrl = map.get("secure_url");
         Object publicId = map.get("public_id");
 
+        if (secureUrl == null || publicId == null) {
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_GATEWAY,
+                    "Image upload failed: incomplete response from storage provider");
+        }
+
         String cloudPictureUrl = secureUrl.toString();
         String cloudPictureName = publicId.toString();
 

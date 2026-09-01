@@ -14,10 +14,10 @@ import com.pathfinder.model.view.RouteIndexView;
 import com.pathfinder.model.view.RouteWithCategoryView;
 import com.pathfinder.repository.RouteRepository;
 import com.pathfinder.repository.UserRepository;
+import com.pathfinder.util.AppConstants;
 import io.jenetics.jpx.Bounds;
 import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.Metadata;
-import io.jenetics.jpx.UInt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +49,7 @@ public class RouteService {
 
     private static final int TOP_COMMENTED_POOL = 5;
 
-    public static final String DEFAULT_PIC_URL = "/images/pic4.jpg";
+    public static final String DEFAULT_PIC_URL = AppConstants.DEFAULT_PIC_URL;
 
     private final String gpxStoragePath;
 
@@ -152,7 +152,7 @@ public class RouteService {
 
         routeDetailsView.setPictureUrls(routeEntity.getPictures().stream()
                 .map(PictureEntity::getUrl)
-                .collect(Collectors.toSet())
+                .collect(Collectors.toCollection(java.util.LinkedHashSet::new))
         );
 
         if (routeEntity.getAuthor() != null) {
@@ -180,8 +180,9 @@ public class RouteService {
 
                     route.setPictureUrl(
                             r.getPictures().stream()
-                                    .findAny().orElse(new PictureEntity().setUrl(DEFAULT_PIC_URL))
-                                    .getUrl());
+                                    .findAny()
+                                    .map(PictureEntity::getUrl)
+                                    .orElse(AppConstants.DEFAULT_PIC_URL));
 
                     return route.setCategoryTypes(
                             r.getCategories().stream()
@@ -260,12 +261,7 @@ public class RouteService {
                     .map(p -> List.of(p.getLongitude().doubleValue(), p.getLatitude().doubleValue()))
                     .toList();
 
-            Optional<UInt> number = gpx.getTracks().get(0).getNumber();
-
             double zoom = 12.5d;
-            if (number.isPresent()) {
-                zoom = number.get().doubleValue() / 10.0d;
-            }
 
             Optional<Bounds> bounds = gpx.getMetadata().flatMap(Metadata::getBounds);
 

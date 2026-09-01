@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,8 +83,13 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    /**
+     * Updates name/email and optionally the password. Returns a fresh {@link Authentication}
+     * when the password was changed so the caller can persist the new security context;
+     * returns {@code null} when only non-credential fields were updated.
+     */
     @Transactional
-    public void updateProfile(Long userId, UserEditDto dto) {
+    public Authentication updateProfile(Long userId, UserEditDto dto) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found: " + userId));
 
@@ -102,13 +106,12 @@ public class UserService {
         if (dto.getNewPassword() != null && !dto.getNewPassword().isBlank()) {
             user.setPassword(encoder.encode(dto.getNewPassword()));
             userRepository.save(user);
-            // re-authenticate so the session token stays valid with the new password
             UserDetails refreshed = userDetailsService.loadUserByUsername(user.getUsername());
-            Authentication auth = new UsernamePasswordAuthenticationToken(
+            return new UsernamePasswordAuthenticationToken(
                     refreshed, refreshed.getPassword(), refreshed.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        } else {
-            userRepository.save(user);
         }
+
+        userRepository.save(user);
+        return null;
     }
 }

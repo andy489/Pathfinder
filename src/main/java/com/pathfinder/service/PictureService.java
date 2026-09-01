@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class PictureService {
@@ -37,8 +38,10 @@ public class PictureService {
 
     @Transactional
     public void savePicture(String cloudUrl, String imgId, Long authorId, Long routeId) {
-        UserEntity userEntity = userRepository.getReferenceById(authorId);
-        RouteEntity routeEntity = routeRepository.getReferenceById(routeId);
+        UserEntity userEntity = userRepository.findById(authorId)
+                .orElseThrow(() -> new NoSuchElementException("User not found: " + authorId));
+        RouteEntity routeEntity = routeRepository.findById(routeId)
+                .orElseThrow(() -> new NoSuchElementException("Route not found: " + routeId));
 
         PictureEntity newPic = new PictureEntity()
                 .setUrl(cloudUrl)

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -54,9 +56,10 @@ class UserServiceTest {
                 .setFullName("New Name")
                 .setEmail("new@example.com");
 
-        userService.updateProfile(1L, dto);
+        Authentication result = userService.updateProfile(1L, dto);
 
         verify(userRepository).save(user);
+        assertThat(result).isNull();
     }
 
     @Test
@@ -107,9 +110,10 @@ class UserServiceTest {
                 .setEmail("email@example.com")
                 .setNewPassword("newpass");
 
-        userService.updateProfile(1L, dto);
+        Authentication result = userService.updateProfile(1L, dto);
 
         verify(passwordEncoder).encode("newpass");
         verify(userRepository).save(user);
+        assertThat(result).isNotNull();
     }
 }

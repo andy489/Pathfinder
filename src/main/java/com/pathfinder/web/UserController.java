@@ -7,6 +7,7 @@ import com.pathfinder.model.user.PathfinderUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -112,7 +113,9 @@ public class UserController extends GenericController {
             @Valid @ModelAttribute(name = "userEditModel") UserEditDto userEditDto,
             BindingResult bindingResult,
             @AuthenticationPrincipal PathfinderUserDetails userDetails,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
+            HttpServletResponse response) {
 
         String newPw = userEditDto.getNewPassword();
         String confirmPw = userEditDto.getConfirmPassword();
@@ -128,7 +131,14 @@ public class UserController extends GenericController {
         }
 
         try {
-            userService.updateProfile(userDetails.getId(), userEditDto);
+            Authentication newAuth = userService.updateProfile(userDetails.getId(), userEditDto);
+            if (newAuth != null) {
+                SecurityContextHolderStrategy strategy = SecurityContextHolder.getContextHolderStrategy();
+                SecurityContext context = strategy.createEmptyContext();
+                context.setAuthentication(newAuth);
+                strategy.setContext(context);
+                securityContextRepository.saveContext(context, request, response);
+            }
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("userEditModel", userEditDto)
                     .addFlashAttribute("editError", e.getMessage());

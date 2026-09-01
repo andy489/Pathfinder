@@ -47,6 +47,7 @@ public interface MapStructMapper {
     @Mapping(target = "gpxCoordinates", ignore = true)
     @Mapping(target = "pictureUrls", ignore = true)
     @Mapping(target = "authorName", ignore = true)
+    @Mapping(target = "authorId", ignore = true)
     RouteDetailsView toDetailsView(RouteEntity routeEntity);
 
     @Mapping(target = "pictureUrl", ignore = true)

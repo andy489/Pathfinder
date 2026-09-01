@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class CommentEntity extends GenericEntity {
 
     @Column(name = "approved")
-    private Boolean approved;
+    private Boolean approved = false;
 
     @Column(nullable = false)
     @CreationTimestamp

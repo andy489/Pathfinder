@@ -31,11 +31,16 @@ public class TranslationService {
     private final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
     private final String libreTranslateUrl;
+    private final HttpClient httpClient;
 
     public TranslationService(ObjectMapper objectMapper,
                                @Value("${pathfinder.libretranslate-url:http://localhost:5000}") String libreTranslateUrl) {
         this.objectMapper = objectMapper;
         this.libreTranslateUrl = libreTranslateUrl;
+        this.httpClient = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(10))
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
     }
 
     /**
@@ -107,18 +112,13 @@ public class TranslationService {
                 + "?client=gtx&sl=" + sourceLang + "&tl=" + targetLang
                 + "&dt=t&q=" + encoded;
 
-        HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(10))
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("User-Agent", "Mozilla/5.0")
                 .GET()
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new IOException("Google Translate returned HTTP " + response.statusCode());
@@ -150,18 +150,13 @@ public class TranslationService {
                 java.util.Map.of("q", text, "source", sourceLang, "target", targetLang, "format", "text")
         );
 
-        HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(5))
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(libreTranslateUrl + "/translate"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new IOException("LibreTranslate returned HTTP " + response.statusCode() + ": " + response.body());
@@ -199,12 +194,8 @@ public class TranslationService {
         String langpair = URLEncoder.encode(sourceLang + "|" + targetLang, StandardCharsets.UTF_8);
         String url = "https://api.mymemory.translated.net/get?q=" + encoded + "&langpair=" + langpair;
 
-        HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(5))
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             log.warn("MyMemory returned {} for {}→{}", response.statusCode(), sourceLang, targetLang);

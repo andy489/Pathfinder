@@ -12,8 +12,14 @@ A Spring Boot web application for sharing and discovering hiking, cycling, and d
 ### All Routes
 ![All Routes](assets/03.png)
 
+### All Routes — Page 2
+![All Routes Page 2](assets/09.png)
+
 ### Route Details — Interactive Map, Photos & Comments
 ![Route Details](assets/02.png)
+
+### Route Details — Аладжа манастир, Златни пясъци
+![Route Details Aladja](assets/10.png)
 
 ### Route Details — Expert view (хижа Алеко → Черни връх)
 ![Route Details Expert](assets/06.png)

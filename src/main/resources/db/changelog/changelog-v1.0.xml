@@ -1548,4 +1548,12 @@
         </update>
     </changeSet>
 
+    <changeSet id="80" author="andy489">
+        <!-- Rename route 10: Цикъл на Рилските езера → Седемте Рилски езера -->
+        <update tableName="routes">
+            <column name="name" value="Седемте Рилски езера"/>
+            <where>id = 10</where>
+        </update>
+    </changeSet>
+
 </databaseChangeLog>

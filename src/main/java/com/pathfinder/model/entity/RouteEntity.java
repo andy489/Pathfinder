@@ -44,6 +44,8 @@ public class RouteEntity extends GenericEntity {
 
     private String videoUrl;
 
+    private String mainPictureUrl;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private UserEntity author;

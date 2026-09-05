@@ -1498,4 +1498,54 @@
         </insert>
     </changeSet>
 
+    <changeSet id="75" author="andy489">
+        <!-- Add main_picture_url column to routes for deterministic tile image -->
+        <addColumn tableName="routes">
+            <column name="main_picture_url" type="VARCHAR(500)"/>
+        </addColumn>
+        <!-- Set Ledenika tile image to an outdoor park shot -->
+        <update tableName="routes">
+            <column name="main_picture_url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615943/pathfinder/ledenika/ledenika_new_home_eZDfd_16_b.jpg"/>
+            <where>id = 12</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="76" author="andy489">
+        <!-- Fix author name: Александър Стоянов → Андрей Стоев -->
+        <update tableName="users">
+            <column name="full_name" value="Андрей Стоев"/>
+            <column name="email" value="andrey.stoev@pathfinder.bg"/>
+            <column name="username" value="astoev"/>
+            <where>id = 1</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="77" author="andy489">
+        <!-- Fix misspelled picture titles: Вратцата → Врацата -->
+        <update tableName="pictures">
+            <column name="title" value="В сърцето на Врацата"/>
+            <where>title = 'В сърцето на Вратцата'</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Проход Врацата - пътят нагоре"/>
+            <where>title = 'Проход Вратцата - пътят нагоре'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="78" author="andy489">
+        <!-- Fix route name: Проход Вратцата → Проход Врацата -->
+        <update tableName="routes">
+            <column name="name" value="Проход Врацата"/>
+            <where>id = 7</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="79" author="andy489">
+        <!-- Rename route: Леденика пещера → Парк Леденика -->
+        <update tableName="routes">
+            <column name="name" value="Парк Леденика"/>
+            <where>id = 12</where>
+        </update>
+    </changeSet>
+
 </databaseChangeLog>

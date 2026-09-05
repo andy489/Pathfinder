@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" creator="Pathfinder" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <metadata>
-    <name>Проход Вратцата</name>
+    <name>Проход Врацата</name>
     <bounds minlat="43.1812634" minlon="23.4838223" maxlat="43.2173494" maxlon="23.5468154"/>
   </metadata>
   <trk>
-    <name>Проход Вратцата</name>
+    <name>Проход Врацата</name>
     <number>120</number>
     <trkseg>
       <trkpt lat="43.2154133" lon="23.5438817">

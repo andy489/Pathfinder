@@ -111,12 +111,7 @@ public class RouteService {
         return routeRepository.findAllWithPictures().stream().map(
                 r -> {
                     RouteIndexView route = mapStructMapper.toView(r);
-                    route.setPictureUrl(
-                            r.getPictures()
-                                    .stream()
-                                    .findAny()
-                                    .orElse(new PictureEntity().setUrl(DEFAULT_PIC_URL))
-                                    .getUrl());
+                    route.setPictureUrl(resolveTileImage(r));
                     return route;
                 }
         ).toList();
@@ -128,11 +123,7 @@ public class RouteService {
                 PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending())
         ).map(r -> {
             RouteIndexView route = mapStructMapper.toView(r);
-            route.setPictureUrl(
-                    r.getPictures().stream()
-                            .findAny()
-                            .orElse(new PictureEntity().setUrl(DEFAULT_PIC_URL))
-                            .getUrl());
+            route.setPictureUrl(resolveTileImage(r));
             return route;
         });
     }
@@ -212,13 +203,19 @@ public class RouteService {
         return routeRepository.searchByNameOrDescription(query.trim()).stream()
                 .map(r -> {
                     RouteIndexView route = mapStructMapper.toView(r);
-                    route.setPictureUrl(
-                            r.getPictures().stream()
-                                    .findAny()
-                                    .orElse(new PictureEntity().setUrl(DEFAULT_PIC_URL))
-                                    .getUrl());
+                    route.setPictureUrl(resolveTileImage(r));
                     return route;
                 }).toList();
+    }
+
+    private String resolveTileImage(RouteEntity r) {
+        if (r.getMainPictureUrl() != null) {
+            return r.getMainPictureUrl();
+        }
+        return r.getPictures().stream()
+                .min(java.util.Comparator.comparingLong(PictureEntity::getId))
+                .map(PictureEntity::getUrl)
+                .orElse(DEFAULT_PIC_URL);
     }
 
     private String buildSafeFileName() {

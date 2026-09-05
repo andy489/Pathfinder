@@ -30,6 +30,9 @@ A Spring Boot web application for sharing and discovering hiking, cycling, and d
 ### Admin Panel — User Permissions
 ![User Permissions](assets/05.png)
 
+### Promo — Цикъл на Рилските езера
+![Promo](assets/promo.png)
+
 ---
 
 ## Quick Start

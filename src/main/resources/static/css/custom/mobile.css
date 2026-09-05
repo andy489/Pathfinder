@@ -1,35 +1,137 @@
-/* Media Queries */
-@media (max-width: 724px) {
-  .top-container {
-    grid-template-areas:
-      'showcase showcase'
-      'top-box-a top-box-b';
-  }
+/* ============================================================
+   PATHFINDER — Responsive Breakpoints
+   ============================================================ */
 
-  .showcase h1 {
-    font-size: 2.5rem;
-  }
+@media (max-width: 1024px) {
+    .route-details-layout {
+        grid-template-columns: 260px 1fr;
+    }
 
-  .main-nav ul {
-    grid-template-columns: 1fr;
-  }
-
-  .road {
-    grid-template-columns: 1fr;
-  }
-
-  .road .btn {
-    display: block;
-    text-align: center;
-    margin: auto;
-  }
+    .profile-grid {
+        grid-template-columns: 240px 1fr;
+    }
 }
 
-@media (max-width: 500px) {
-  .top-container {
-    grid-template-areas:
-      'showcase'
-      'top-box-a'
-      'top-box-b';
-  }
+@media (max-width: 768px) {
+    .site-header .container {
+        gap: var(--sp-md);
+    }
+
+    .main-nav {
+        display: none;
+    }
+
+    .hero {
+        min-height: 380px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        gap: var(--sp-sm);
+    }
+
+    .featured-route {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .featured-route-img {
+        height: 240px;
+    }
+
+    .route-details-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .route-sidebar {
+        position: static;
+        order: -1;
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-cities {
+        gap: var(--sp-md);
+    }
+
+    .routes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #video iframe {
+        height: 260px;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding-inline: var(--sp-md);
+    }
+
+    .hero-content {
+        padding: var(--sp-2xl) var(--sp-md) var(--sp-xl);
+    }
+
+    .hero-title {
+        font-size: 1.7rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .auth-card {
+        padding: var(--sp-xl);
+        border-radius: var(--r-lg);
+    }
+
+    .form-card {
+        padding: var(--sp-xl);
+    }
+
+    .route-stats-row {
+        gap: var(--sp-md);
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--sp-sm);
+    }
+
+    .about-features {
+        grid-template-columns: 1fr;
+    }
+
+    .routes-page-header {
+        padding: var(--sp-xl) 0;
+    }
+
+    .routes-page-title {
+        font-size: 1.5rem;
+    }
+
+    .search-bar {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 400px) {
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-welcome {
+        display: none;
+    }
 }

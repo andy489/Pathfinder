@@ -1,0 +1,332 @@
+/* ============================================================
+   ADMIN — Comments Moderation Page
+   ============================================================ */
+
+/* Page heading */
+.admin-page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--clr-forest);
+    margin-bottom: .25rem;
+}
+
+.admin-page-subtitle {
+    color: var(--clr-muted);
+    font-size: .95rem;
+    margin-bottom: 0;
+}
+
+/* ---- Section title bar ---- */
+.admin-section-title {
+    background: var(--clr-forest);
+    color: #fff;
+    padding: .75rem 0;
+    margin-bottom: 1rem;
+}
+
+.admin-section-title__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-section-title__label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+}
+
+.admin-section-title__badge {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 999px;
+    padding: .2rem .85rem;
+    font-size: .85rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* ---- Accordion wrapper ---- */
+.admin-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+
+/* ---- Accordion item ---- */
+.admin-accordion__item {
+    border: 1px solid var(--clr-border, #e2e8e4);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    transition: box-shadow .2s;
+}
+
+.admin-accordion__item:hover {
+    box-shadow: 0 3px 10px rgba(0,0,0,.1);
+}
+
+.admin-accordion__item--empty {
+    opacity: .65;
+}
+
+/* ---- Accordion header/toggle ---- */
+.admin-accordion__header {
+    background: #fff;
+}
+
+.admin-accordion__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: .75rem 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--clr-forest);
+    font-weight: 600;
+    font-size: .95rem;
+    transition: background .15s;
+}
+
+.admin-accordion__toggle:hover {
+    background: var(--clr-surface, #f8faf9);
+}
+
+.admin-accordion__toggle:focus {
+    outline: 2px solid var(--clr-forest-lt);
+    outline-offset: -2px;
+}
+
+.admin-accordion__route-name {
+    flex: 1;
+}
+
+.admin-accordion__meta {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-shrink: 0;
+}
+
+.admin-accordion__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.6rem;
+    height: 1.6rem;
+    padding: 0 .5rem;
+    border-radius: 999px;
+    background: var(--clr-forest);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.admin-accordion__count--zero {
+    background: var(--clr-border, #e2e8e4);
+    color: var(--clr-muted);
+}
+
+.admin-accordion__icon {
+    font-size: 1.2rem;
+    color: var(--clr-muted);
+    transition: transform .2s;
+}
+
+/* ---- Accordion body ---- */
+.admin-accordion__body {
+    border-top: 1px solid var(--clr-border, #e2e8e4);
+}
+
+.admin-accordion__no-comments {
+    padding: 1.25rem;
+    color: var(--clr-muted);
+    font-size: .9rem;
+    text-align: center;
+}
+
+.admin-accordion__no-comments i {
+    margin-right: .4rem;
+    opacity: .5;
+}
+
+/* ---- Comments table rows ---- */
+.admin-comments-table__header {
+    display: grid;
+    grid-template-columns: 160px 1fr 130px 200px;
+    padding: .5rem 1.25rem;
+    background: var(--clr-surface, #f8faf9);
+    border-bottom: 1px solid var(--clr-border, #e2e8e4);
+    font-size: .78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--clr-muted);
+}
+
+.admin-comments-table__row {
+    display: grid;
+    grid-template-columns: 160px 1fr 130px 200px;
+    align-items: center;
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid var(--clr-border, #e2e8e4);
+    font-size: .9rem;
+    transition: background .15s;
+}
+
+.admin-comments-table__row:last-of-type {
+    border-bottom: none;
+}
+
+.admin-comments-table__row:hover {
+    background: var(--clr-surface, #f8faf9);
+}
+
+.admin-comments-table__col--user {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+    color: var(--clr-dark);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-comments-table__avatar {
+    color: var(--clr-muted);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.admin-comments-table__col--text {
+    color: var(--clr-dark);
+    line-height: 1.5;
+    padding-right: 1rem;
+}
+
+.admin-comments-table__col--date {
+    color: var(--clr-muted);
+    font-size: .82rem;
+}
+
+.admin-comments-table__col--actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+/* ---- Bulk actions row ---- */
+.admin-comments-table__bulk {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .75rem 1.25rem;
+    background: var(--clr-surface, #f8faf9);
+    border-top: 1px solid var(--clr-border, #e2e8e4);
+}
+
+/* ---- Action buttons ---- */
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .3rem .75rem;
+    border: none;
+    border-radius: 6px;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity .15s, transform .1s;
+    line-height: 1.4;
+    background: none;
+}
+
+.admin-btn:hover {
+    opacity: .85;
+    transform: translateY(-1px);
+}
+
+.admin-btn:active {
+    transform: translateY(0);
+}
+
+.admin-btn--approve {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+}
+
+.admin-btn--approve:hover {
+    background: #a7f3d0;
+}
+
+.admin-btn--reject {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+}
+
+.admin-btn--reject:hover {
+    background: #fde68a;
+}
+
+.admin-btn--delete {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+.admin-btn--delete:hover {
+    background: #fecaca;
+}
+
+.admin-btn--bulk {
+    padding: .4rem 1rem;
+    font-size: .85rem;
+}
+
+/* ---- Empty state ---- */
+.admin-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--clr-muted);
+}
+
+.admin-empty-state i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: .75rem;
+    opacity: .3;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .admin-comments-table__header {
+        display: none;
+    }
+
+    .admin-comments-table__row {
+        grid-template-columns: 1fr;
+        gap: .4rem;
+    }
+
+    .admin-comments-table__col--user {
+        font-size: .95rem;
+    }
+
+    .admin-comments-table__col--date {
+        font-size: .78rem;
+    }
+
+    .admin-comments-table__col--actions {
+        margin-top: .25rem;
+    }
+}

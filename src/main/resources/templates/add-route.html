@@ -7,142 +7,158 @@
 
 <header th:replace="~{fragments/commons::navigation}"></header>
 
-<!-- Top Container -->
-<div
-     class="row justify-content-center ">
-    <form id="add-route-form" class="w-50 rounded text-white mt-5"
-          th:action="@{/routes/add}"
-          th:method="post"
-          th:object="${routeAddModel}"
-          enctype="multipart/form-data">
+<div class="form-page">
+    <div class="container">
+        <div class="form-card">
+            <h2 class="form-card-title"><i class="fas fa-route"></i> <span th:text="#{add-route.title}">Add a New Route</span></h2>
 
-        <h3 class="border-light pl-2">Add a new route</h3>
-        <div>
-            <div class="form-group">
-                <label for="inputName" class="col-form-label ">Name</label>
-            </div>
-            <div class="form-group">
-                <input th:field="*{name}"
-                       th:errorclass="'is-invalid bg-danger'"
-                       type="text"
-                       id="inputName"
-                       class="form-control"
-                       aria-describedby="inputNameError">
+            <form id="add-route-form" class="form-stack"
+                  th:action="@{/routes/add}"
+                  th:method="post"
+                  th:object="${routeAddModel}"
+                  enctype="multipart/form-data">
 
-                <div class="invalid-feedback errors alert alert-danger">
-                    <div th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
+                <div class="form-grid">
+
+                    <!-- Route Name — full width -->
+                    <div class="form-field form-field--full">
+                        <label for="inputName" th:text="#{add-route.name}">Route Name</label>
+                        <input th:field="*{name}"
+                               th:errorclass="is-invalid"
+                               type="text" id="inputName" th:placeholder="#{add-route.name.placeholder}">
+                        <div class="field-error" th:if="${#fields.hasErrors('name')}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span th:each="err : ${#fields.errors('name')}" th:text="${err}"></span>
+                        </div>
+                    </div>
+
+                    <!-- Description — full width -->
+                    <div class="form-field form-field--full">
+                        <label for="inputDescription" th:text="#{add-route.description}">Description</label>
+                        <textarea th:field="*{description}"
+                                  th:errorclass="is-invalid"
+                                  id="inputDescription" rows="5"
+                                  th:placeholder="#{add-route.description.placeholder}"></textarea>
+                        <div class="field-error" th:if="${#fields.hasErrors('description')}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span th:each="err : ${#fields.errors('description')}" th:text="${err}"></span>
+                        </div>
+                    </div>
+
+                    <!-- GPX File — left column -->
+                    <div class="form-field">
+                        <label th:text="#{add-route.gpx}">GPX Track File</label>
+                        <label class="file-drop-zone" id="gpx-drop-zone" for="inputGpx">
+                            <input type="file"
+                                   th:field="*{gpxCoordinates}"
+                                   th:errorclass="is-invalid"
+                                   id="inputGpx"
+                                   accept=".gpx,.xml">
+                            <span class="file-drop-zone__icon"><i class="fas fa-map-marked-alt"></i></span>
+                            <span class="file-drop-zone__label" id="gpx-label">Click or drag &amp; drop</span>
+                            <span class="file-drop-zone__hint">.gpx or .xml — max 5 MB</span>
+                        </label>
+                        <div class="field-error" th:if="${#fields.hasErrors('gpxCoordinates')}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span th:errors="*{gpxCoordinates}"></span>
+                        </div>
+                        <div class="field-error" th:if="${multipartExceed != null}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span th:text="${multipartExceed}"></span>
+                        </div>
+                    </div>
+
+                    <!-- Difficulty Level — right column -->
+                    <div class="form-field">
+                        <label for="level" th:text="#{add-route.level}">Difficulty Level</label>
+                        <select id="level" th:field="*{level}" th:errorclass="is-invalid">
+                            <option value="" th:text="#{add-route.level.select}">— Select level —</option>
+                            <option th:each="l : ${T(com.pathfinder.model.enumerated.LevelEnum).values()}"
+                                    th:text="#{level.__${l.name()}__}" th:value="${l}"
+                                    th:selected="${l} == *{level}">Level</option>
+                        </select>
+                        <div class="field-error" th:if="${#fields.hasErrors('level')}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span th:each="err : ${#fields.errors('level')}" th:text="${err}"></span>
+                        </div>
+                    </div>
+
+                    <!-- YouTube Video ID — left column -->
+                    <div class="form-field">
+                        <label for="videoUrl">
+                            <span th:text="#{add-route.video}">YouTube Video ID</span>
+                            <span class="text-muted" style="font-weight:400;font-size:.82rem" th:text="#{add-route.video.hint}">(last 11 characters from YouTube URL)</span>
+                        </label>
+                        <input id="videoUrl" type="text"
+                               th:field="*{videoUrl}"
+                               th:errorclass="is-invalid"
+                               th:placeholder="#{add-route.video.placeholder}">
+                        <div class="field-error" th:if="${#fields.hasErrors('videoUrl')}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span th:each="err : ${#fields.errors('videoUrl')}" th:text="${err}"></span>
+                        </div>
+                    </div>
+
+                    <!-- Categories — right column -->
+                    <div class="form-field">
+                        <label th:text="#{add-route.categories}">Categories</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-pill"
+                                   th:each="c : ${T(com.pathfinder.model.enumerated.RouteCategoryEnum).values()}">
+                                <input th:field="*{categories}" th:value="${c}" type="checkbox">
+                                <span th:text="#{category.__${c.name()}__}">Category</span>
+                            </label>
+                        </div>
+                        <div class="field-error" th:if="${#fields.hasErrors('categories')}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span th:errors="*{categories}"></span>
+                        </div>
+                    </div>
+
+                </div><!-- /form-grid -->
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-plus"></i> <span th:text="#{add-route.submit}">Add Route</span>
+                    </button>
                 </div>
 
-            </div>
+            </form>
         </div>
-
-        <div>
-            <div class="form-group">
-                <label for="inputDescription" class="col-form-label ">Description</label>
-            </div>
-            <div class="form-group">
-                    <textarea th:field="*{description}"
-                              th:errorclass="'is-invalid bg-danger'"
-                              id="inputDescription"
-                              class="form-control"
-                              aria-describedby="inputDescriptionError">
-
-                    </textarea>
-
-                <div class="invalid-feedback errors alert alert-danger">
-                    <div th:each="err : ${#fields.errors('description')}" th:text="${err}"></div>
-                </div>
-
-            </div>
-        </div>
-
-        <div>
-            <div class="form-group">
-                <label for="inputGpx" class="col-form-label ">GPX Coordinates</label>
-            </div>
-            <div class="form-group">
-                <input type="file"
-                       th:field="*{gpxCoordinates}"
-                       th:errorclass="'is-invalid bg-danger'"
-                       id="inputGpx"
-                       class="form-control-file"
-                       aria-describedby="inputGpxError">
-
-                <small th:errors="*{gpxCoordinates}" class="form-text errors alert alert-danger">
-                    {Invalid file format}
-                </small>
-
-                <small th:if="${multipartExceed != null}" th:text="${multipartExceed}"
-                       class="form-text errors alert alert-danger is-invalid bg-danger">
-                    {multipart file size exceeded}
-                </small>
-
-            </div>
-        </div>
-
-        <div>
-            <div class="form-group">
-                <label for="level">Level</label>
-                <select id="level" class="custom-select"
-                        th:field="*{level}"
-                        th:errorclass="'is-invalid bg-danger'">
-                    <option value="">- Select level -</option>
-                    <option th:each="l : ${T(com.pathfinder.model.enumerated.LevelEnum).values()}"
-                            th:text="${l}"
-                            th:value="${l}"
-                            th:selected="${l} == *{level}">
-                        Select level
-                    </option>
-                </select>
-
-                <div class="invalid-feedback errors alert alert-danger">
-                    <div th:each="err : ${#fields.errors('level')}" th:text="${err}"></div>
-                </div>
-
-            </div>
-        </div>
-
-        <div>
-            <div class="form-group">
-                <label for="videoUrl">Video Url (only last eleven characters from YouTube)</label>
-                <input id="videoUrl" type="text"
-                       th:field="*{videoUrl}"
-                       th:errorclass="'is-invalid bg-danger'"
-                       class="form-control" placeholder="Video url">
-
-                <div class="invalid-feedback errors alert alert-danger">
-                    <div th:each="err : ${#fields.errors('videoUrl')}" th:text="${err}"></div>
-                </div>
-
-            </div>
-        </div>
-
-        <div>
-            <div class="form-group p-3">
-                <label class="p-2" for="categories">Categories:</label>
-                <input class="m-3"
-                       th:field="*{categories}"
-                       th:each="c : ${T(com.pathfinder.model.enumerated.RouteCategoryEnum).values()}"
-                       th:text="${c.getDisplayName()}"
-                       th:value="${c}"
-                       type="checkbox"
-                       id="categories">
-
-                <small th:errors="*{categories}" class="row alert-danger alert"></small>
-
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-center mt-4">
-            <button class="btn btn-primary btn-block w-50" type="submit">Add Route</button>
-        </div>
-
-    </form>
-
+    </div>
 </div>
 
 <footer th:replace="~{fragments/commons::footer}"></footer>
 
-</body>
+<script>
+    (function () {
+        const input = document.getElementById('inputGpx');
+        const zone  = document.getElementById('gpx-drop-zone');
+        const label = document.getElementById('gpx-label');
 
+        function showFile(name) {
+            label.innerHTML = '<span class="file-drop-zone__selected"><i class="fas fa-check-circle"></i>' + name + '</span>';
+        }
+
+        input.addEventListener('change', () => {
+            if (input.files.length) showFile(input.files[0].name);
+        });
+
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                const dt = new DataTransfer();
+                dt.items.add(files[0]);
+                input.files = dt.files;
+                showFile(files[0].name);
+            }
+        });
+    })();
+</script>
+
+</body>
 </html>

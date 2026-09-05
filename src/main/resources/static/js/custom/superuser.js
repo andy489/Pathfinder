@@ -1,4 +1,4 @@
-const backendLocation = "http://localhost:8080"
+const backendLocation = ""
 
 const csrfTokenName = document.head.querySelector('[name=_csrf_header]').content
 const csrfTokenValue = document.head.querySelector('[name=_csrf]').content
@@ -298,98 +298,89 @@ function toggleUserPerm(userId, from, to) {
     })
 }
 
+// Role → button config: id-suffix, CSS colour class, icon class, label
+const ROLE_BTN = {
+    admin:     { cls: 'perm-btn--to-admin',     icon: 'fa-user-shield', label: 'Admin' },
+    moderator: { cls: 'perm-btn--to-moderator', icon: 'fa-user-tie',   label: 'Moderator' },
+    regular:   { cls: 'perm-btn--to-regular',   icon: 'fa-user',       label: 'Regular' },
+}
+
+function _setBtn(el, toRole) {
+    let cfg = ROLE_BTN[toRole]
+    // remove all colour variants, set the right one
+    el.classList.remove('perm-btn--to-admin', 'perm-btn--to-moderator', 'perm-btn--to-regular')
+    el.classList.add(cfg.cls)
+    el.innerHTML = `<i class="fas ${cfg.icon}"></i> ${cfg.label}`
+}
+
 function deleteAndToggleUserPermByIdJS(userId, from, to) {
 
     let target = document.getElementById('user-' + userId)
-    let clone = target.parentElement.cloneNode(true)
-    target.parentElement.remove()
+    let clone = target.cloneNode(true)
+    target.remove()
 
+    // insert after last user row in the target section (before filter/header divs)
     let parent = document.getElementById('collapse-' + to)
-    let lastElement = parent.lastElementChild
-    lastElement.after(clone)
+    // find the last .perm-users-table__row inside the collapse, or fall back to appending
+    let rows = parent.querySelectorAll('.perm-users-table__row')
+    if (rows.length > 0) {
+        rows[rows.length - 1].after(clone)
+    } else {
+        parent.appendChild(clone)
+    }
 
+    // update class on the row itself so filter still works
+    clone.classList.remove('user-body-' + from)
+    clone.classList.add('user-body-' + to)
+
+    // The 6 possible transitions: rewire the two action buttons
+    // Each button id is: userId-currentRole-targetRole
     if (from === 'admin') {
-        let makeModerator = document.getElementById(userId + '-' + from + '-' + 'moderator')
-        let makeRegular = document.getElementById(userId + '-' + from + '-' + 'regular')
-
+        let makeModerator = document.getElementById(userId + '-admin-moderator')
+        let makeRegular   = document.getElementById(userId + '-admin-regular')
         if (to === 'moderator') {
-            makeModerator.setAttribute('id', userId + '-' + to + '-' + from)
-            let firstChildMod = makeModerator.firstElementChild
-
-            firstChildMod.classList.remove('bg-success')
-            firstChildMod.classList.add('bg-warning')
-            firstChildMod.innerText = 'Make admin'
-
-            makeRegular.setAttribute('id', userId + '-' + to + '-' + 'regular')
+            makeModerator.setAttribute('id', userId + '-moderator-admin')
+            _setBtn(makeModerator, 'admin')
+            makeRegular.setAttribute('id', userId + '-moderator-regular')
         } else if (to === 'regular') {
-            makeModerator.setAttribute('id', userId + '-' + to + '-' + 'moderator')
-            let firstChildMod = makeModerator.firstElementChild
-
-            firstChildMod.classList.remove('bg-success')
-            firstChildMod.classList.add('bg-warning')
-
-            makeRegular.setAttribute('id', userId + '-' + 'regular' + '-' + 'admin')
-            let firstChildReg = makeRegular.firstElementChild
-            firstChildReg.classList.remove('bg-success')
-            firstChildReg.classList.add('bg-danger')
-            firstChildReg.innerText = 'Make admin'
+            makeModerator.setAttribute('id', userId + '-regular-moderator')
+            _setBtn(makeModerator, 'moderator')
+            makeRegular.setAttribute('id', userId + '-regular-admin')
+            _setBtn(makeRegular, 'admin')
         }
-    }
-
-    if (from === 'moderator') {
-        let makeAdmin = document.getElementById(userId + '-' + from + '-' + 'admin')
-        let makeRegular = document.getElementById(userId + '-' + from + '-' + 'regular')
-
-        makeAdmin.setAttribute('id', userId + '-' + to + '-' + from)
-        let firstChildAdm = makeAdmin.firstElementChild
-
+    } else if (from === 'moderator') {
+        let makeAdmin   = document.getElementById(userId + '-moderator-admin')
+        let makeRegular = document.getElementById(userId + '-moderator-regular')
         if (to === 'admin') {
-            firstChildAdm.classList.remove('bg-warning')
-            firstChildAdm.classList.add('bg-success')
-            firstChildAdm.innerText = 'Make moderator'
-
-            makeRegular.setAttribute('id', userId + '-' + to + '-' + 'regular')
-
+            makeAdmin.setAttribute('id', userId + '-admin-moderator')
+            _setBtn(makeAdmin, 'moderator')
+            makeRegular.setAttribute('id', userId + '-admin-regular')
         } else if (to === 'regular') {
-            firstChildAdm.innerText = 'Make moderator'
-
-            makeRegular.setAttribute('id', userId + '-' + to + '-' + 'admin')
-            let firstChildReg = makeRegular.firstElementChild
-            firstChildReg.classList.remove('bg-success')
-            firstChildReg.classList.add('bg-danger')
-            firstChildReg.innerText = 'Make admin'
+            makeAdmin.setAttribute('id', userId + '-regular-moderator')
+            _setBtn(makeAdmin, 'moderator')
+            makeRegular.setAttribute('id', userId + '-regular-admin')
+            _setBtn(makeRegular, 'admin')
         }
-    }
-
-    if (from === 'regular') {
-        let makeModerator = document.getElementById(userId + '-' + from + '-' + 'moderator')
-        let makeAdmin = document.getElementById(userId + '-' + from + '-' + 'admin')
-
+    } else if (from === 'regular') {
+        let makeModerator = document.getElementById(userId + '-regular-moderator')
+        let makeAdmin     = document.getElementById(userId + '-regular-admin')
         if (to === 'moderator') {
-            makeModerator.setAttribute('id', userId + '-' + to + '-' + 'admin')
-            let firstChildMod = makeModerator.firstElementChild
-            firstChildMod.innerText = 'Make admin'
+            makeModerator.setAttribute('id', userId + '-moderator-admin')
+            _setBtn(makeModerator, 'admin')
+            makeAdmin.setAttribute('id', userId + '-moderator-regular')
+            _setBtn(makeAdmin, 'regular')
         } else if (to === 'admin') {
-            makeModerator.setAttribute('id', userId + '-' + to + '-' + 'moderator')
-            let firstChildMod = makeModerator.firstElementChild
-            firstChildMod.classList.remove('bg-warning')
-            firstChildMod.classList.add('bg-success')
+            makeModerator.setAttribute('id', userId + '-admin-moderator')
+            makeAdmin.setAttribute('id', userId + '-admin-regular')
+            _setBtn(makeAdmin, 'regular')
         }
-
-        makeAdmin.setAttribute('id', userId + '-' + to + '-' + 'regular')
-        let firstChildAdm = makeAdmin.firstElementChild
-        firstChildAdm.classList.remove('bg-danger')
-        firstChildAdm.classList.add('bg-success')
-        firstChildAdm.innerText = 'Make regular'
     }
 
     let toDecrement = document.getElementById('cnt-' + from)
-    let decrementText = toDecrement.innerText
-    toDecrement.innerText = changeNumber(decrementText, 1, false, false)
+    toDecrement.innerText = changeNumber(toDecrement.innerText, 1, false, false)
 
     let toIncrement = document.getElementById('cnt-' + to)
-    let incrementText = toIncrement.innerText
-    toIncrement.innerText = changeNumber(incrementText, 1, true, false)
+    toIncrement.innerText = changeNumber(toIncrement.innerText, 1, true, false)
 }
 
 function changePerm(wrappedId) {
@@ -406,18 +397,16 @@ function filterByInfix(userRole) {
     let users = document.querySelectorAll('.user-body-' + userRole);
     let search = document.querySelector('#search-' + userRole).value.toLowerCase();
 
-    if (search !== '') {
-        for (let i = 0; i < users.length; i++) {
-            let username = users[i].firstElementChild.firstElementChild.firstElementChild.firstElementChild
-                .textContent.toLowerCase();
-
-            if (username.match(search) == null) {
-                users[i].classList.add('d-none')
+    for (let i = 0; i < users.length; i++) {
+        if (search === '') {
+            users[i].classList.remove('d-none');
+        } else {
+            let username = (users[i].dataset.username || '').toLowerCase();
+            if (username.includes(search)) {
+                users[i].classList.remove('d-none');
+            } else {
+                users[i].classList.add('d-none');
             }
-        }
-    } else {
-        for (let i = 0; i < users.length; i++) {
-            users[i].classList.remove('d-none')
         }
     }
 }

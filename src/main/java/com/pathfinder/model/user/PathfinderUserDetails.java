@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -31,7 +30,7 @@ public class PathfinderUserDetails implements UserDetails {
 
     private String email;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 
     private String fullName;
 
@@ -40,7 +39,7 @@ public class PathfinderUserDetails implements UserDetails {
     private Collection<GrantedAuthority> authorities;
 
     public Integer getAge() {
-        if(birthDate == null){
+        if (birthDate == null) {
             throw new IllegalStateException("birthDate is not set");
         }
 

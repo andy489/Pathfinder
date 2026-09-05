@@ -5,140 +5,97 @@
 
 <body>
 
-<main class="p-5 align-content-center bg-blur my-register-div">
+<header th:replace="~{fragments/commons::navigation}"></header>
 
-    <header th:replace="~{fragments/commons::navigation}"></header>
+<div class="auth-page">
+    <div class="auth-card" style="max-width:480px">
+        <div class="auth-logo">
+            <div class="auth-logo-mark"><i class="fas fa-route"></i></div>
+            <h1 class="auth-title" th:text="#{register.title}">Create account</h1>
+            <p class="auth-subtitle" th:text="#{register.subtitle}">Join the Pathfinder community</p>
+        </div>
 
-    <h1 class="border-bottom">Register</h1>
-    <div class="d-flex justify-content-center ">
-        <div class="row">
-            <form th:action="@{/users/register}"
-                  th:method="post"
-                  th:object="${userRegistrationModel}">
-                <div class="justify-content-center">
-                    <div class="col-auto">
-                        <label for="inputUsername" class="col-form-label">Username</label>
-                    </div>
-                    <div class="col-auto">
-                        <input th:field="*{username}"
-                               th:errorclass="'is-invalid bg-danger'"
-                               type="text"
-                               id="inputUsername"
-                               class="form-control"
-                               aria-describedby="usernameHelpInline">
+        <form th:action="@{/users/register}" th:method="post" th:object="${userRegistrationModel}" class="auth-form">
 
-                        <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('username')}" th:text="${err}"></div>
-                        </div>
-
-                    </div>
+            <div class="form-field">
+                <label for="inputUsername" th:text="#{register.username}">Username</label>
+                <input th:field="*{username}"
+                       th:errorclass="is-invalid"
+                       type="text" id="inputUsername" th:placeholder="#{register.username.placeholder}">
+                <div class="field-error" th:if="${#fields.hasErrors('username')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:each="err : ${#fields.errors('username')}" th:text="${err}"></span>
                 </div>
+            </div>
 
-                <div>
-                    <div class="col-auto">
-                        <label for="inputFullName" class="col-form-label ">Full Name</label>
-                    </div>
-                    <div class="col-auto">
-                        <input th:field="*{fullName}"
-                               th:errorclass="'is-invalid bg-danger'"
-                               type="text"
-                               id="inputFullName"
-                               class="form-control"
-                               aria-describedby="fullNameHelpInline">
-
-                        <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('fullName')}" th:text="${err}"></div>
-                        </div>
-
-                    </div>
+            <div class="form-field">
+                <label for="inputFullName" th:text="#{register.fullname}">Full Name</label>
+                <input th:field="*{fullName}"
+                       th:errorclass="is-invalid"
+                       type="text" id="inputFullName" th:placeholder="#{register.fullname.placeholder}">
+                <div class="field-error" th:if="${#fields.hasErrors('fullName')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:each="err : ${#fields.errors('fullName')}" th:text="${err}"></span>
                 </div>
+            </div>
 
-                <div>
-                    <div class="col-auto">
-                        <label for="inputEmail" class="col-form-label ">Email</label>
-                    </div>
-                    <div class="col-auto">
-                        <input th:field="*{email}"
-                               th:errorclass="'is-invalid bg-danger'"
-                               type="text"
-                               id="inputEmail"
-                               class="form-control"
-                               aria-describedby="emailHelpInline">
-
-                        <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
-                        </div>
-
-                    </div>
+            <div class="form-field">
+                <label for="inputEmail" th:text="#{register.email}">Email</label>
+                <input th:field="*{email}"
+                       th:errorclass="is-invalid"
+                       type="text" id="inputEmail" th:placeholder="#{register.email.placeholder}">
+                <div class="field-error" th:if="${#fields.hasErrors('email')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:each="err : ${#fields.errors('email')}" th:text="${err}"></span>
                 </div>
-                <div>
-                    <div class="col-auto">
-                        <label for="inputBirthDate" class="col-form-label ">Birth Date</label>
-                    </div>
-                    <div class="col-auto">
-                        <input th:field="*{birthDate}"
-                               th:errorclass="'is-invalid bg-danger'"
-                               type="date"
-                               id="inputBirthDate"
-                               class="form-control"
-                               aria-describedby="ageHelpInline">
+            </div>
 
-                        <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('birthDate')}" th:text="${err}"></div>
-                        </div>
-
-                    </div>
+            <div class="form-field">
+                <label for="inputBirthDate" th:text="#{register.birthdate}">Birth Date</label>
+                <input th:field="*{birthDate}"
+                       th:errorclass="is-invalid"
+                       type="date" id="inputBirthDate">
+                <div class="field-error" th:if="${#fields.hasErrors('birthDate')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:each="err : ${#fields.errors('birthDate')}" th:text="${err}"></span>
                 </div>
-                <div>
-                    <div class="col-auto">
-                        <label for="inputPassword" class="col-form-label ">Password</label>
-                    </div>
-                    <div class="col-auto">
-                        <input th:field="*{password}"
-                               th:errorclass="'is-invalid bg-danger'"
-                               type="password"
-                               id="inputPassword"
-                               class="form-control"
-                               aria-describedby="passwordHelpInline">
+            </div>
 
-                        <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
-                        </div>
-
-                    </div>
+            <div class="form-field">
+                <label for="inputPassword" th:text="#{register.password}">Password</label>
+                <input th:field="*{password}"
+                       th:errorclass="is-invalid"
+                       type="password" id="inputPassword" th:placeholder="#{register.password.placeholder}" autocomplete="new-password">
+                <div class="field-error" th:if="${#fields.hasErrors('password')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
                 </div>
+            </div>
 
-                <div>
-                    <div class="col-auto">
-                        <label for="inputConfirmPassword" class="col-form-label ">Confirm Password</label>
-                    </div>
-                    <div class="col-auto">
-                        <input th:field="*{confirmPassword}"
-                               th:errorclass="'is-invalid bg-danger'"
-                               type="password"
-                               id="inputConfirmPassword"
-                               class="form-control"
-                               aria-describedby="confirmPasswordHelpInline">
-
-                        <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('confirmPassword')}" th:text="${err}"></div>
-                        </div>
-
-                    </div>
+            <div class="form-field">
+                <label for="inputConfirmPassword" th:text="#{register.confirm-password}">Confirm Password</label>
+                <input th:field="*{confirmPassword}"
+                       th:errorclass="is-invalid"
+                       type="password" id="inputConfirmPassword" th:placeholder="#{register.confirm-password.placeholder}" autocomplete="new-password">
+                <div class="field-error" th:if="${#fields.hasErrors('confirmPassword')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:each="err : ${#fields.errors('confirmPassword')}" th:text="${err}"></span>
                 </div>
+            </div>
 
-                <div class="d-flex justify-content-center mt-4">
-                    <button class="btn btn-primary btn-block w-50" type="submit">Register</button>
-                </div>
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-user-plus"></i> <span th:text="#{register.submit}">Create Account</span>
+            </button>
+        </form>
 
-            </form>
+        <div class="auth-footer">
+            <span th:text="#{register.have-account}">Already have an account?</span>
+            <a th:href="@{/users/login}" th:text="#{register.sign-in}">Sign in</a>
         </div>
     </div>
-</main>
+</div>
 
 <footer th:replace="~{fragments/commons::footer}"></footer>
 
 </body>
-
-
 </html>

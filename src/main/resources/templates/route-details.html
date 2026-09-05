@@ -4,166 +4,201 @@
 
 <head th:insert="~{fragments/commons::head}"></head>
 
-<script defer th:src="@{/js/api/map-box-gl.js}"></script>
-<link defer th:href="@{/css/api/map-box-gl.css}" rel="stylesheet">
-
+<script defer th:src="@{https://unpkg.com/leaflet@1.4.0/dist/leaflet.js}"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+<script defer th:src="@{/js/custom/translate.js}"></script>
 <script defer th:src="@{/js/custom/comments.js}"></script>
 <script defer th:src="@{/js/custom/map.js}"></script>
+<script defer th:src="@{/js/custom/lightbox.js}"></script>
 
-<!--https://developers.google.com/fonts/docs/material_symbols-->
-<!--https://fonts.google.com/icons-->
-<link defer th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200}"
-      rel="stylesheet"/>
-<link defer th:href="@{/css/custom/pulse.css}" rel="stylesheet"/>
+<!-- i18n strings for JS (comment translate feature) -->
+<meta name="i18n-comment-translate"       th:content="#{route.details.comment.translate}">
+<meta name="i18n-comment-translating"     th:content="#{route.details.comment.translating}">
+<meta name="i18n-comment-show-original"   th:content="#{route.details.comment.show-original}">
+<meta name="i18n-comment-translate-error" th:content="'Translation failed'">
+
 <body>
 
-<div class="wrapper">
+<header th:replace="~{fragments/commons::navigation}"></header>
 
-    <header th:replace="~{fragments/commons::navigation}"></header>
+<input type="hidden" name="routeId" id="curr-route-id" th:value="${routeDetails.id}">
 
-    <input type="hidden" name="routeId" id="curr-route-id" th:value="${routeDetails.id}">
+<!-- Route Hero Header -->
+<div class="route-details-hero" th:object="${routeDetails}">
+    <div class="container">
+        <div class="route-details-meta">
+            <span class="level-badge"
+                  th:classappend="*{level.name() == 'BEGINNER'} ? 'beginner' : (*{level.name() == 'INTERMEDIATE'} ? 'intermediate' : 'expert')"
+                  th:text="#{level.__${routeDetails.level.name()}__}">BEGINNER</span>
+        </div>
+        <h1 class="route-details-title" id="track-name" th:text="*{name}">Route Name</h1>
+        <div class="route-stats-row">
+            <div class="route-stat">
+                <i class="fas fa-ruler-horizontal"></i>
+                <span><span th:text="#{route.details.distance}">Distance</span>: <strong><span id="totalDistance">—</span> km</strong></span>
+            </div>
+            <div class="route-stat">
+                <i class="fas fa-user"></i>
+                <span><span th:text="#{route.details.author}">Author</span>: <strong id="authorName" th:text="*{authorName}">—</strong></span>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <div class="details-main"
-         th:object="${routeDetails}">
-        <section class="route-info text-center">
+<!-- Main Layout -->
+<div class="container route-details-layout" th:object="${routeDetails}">
 
-            <h4 id="track-name" th:text="*{name}"></h4>
-            <p>
-                <span class="material-symbols-outlined pulse">hiking</span>
-                Total distance:
-                <span id="totalDistance"></span>&nbsp;km
-            </p>
-            <p>
-                <span class="material-symbols-outlined pulse">face</span>
-                Author :
-                <span id="authorName" th:text="' ' + *{authorName}">{Author Name}</span>
-            </p>
-            <h4>Difficulty Level (1-3):</h4>
+    <!-- Sidebar -->
+    <aside class="route-sidebar">
 
-            <div class="level">
-                <p>
-                    <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
-                </p>
-                <p th:if="*{level.name() == 'INTERMEDIATE'}">
-                    <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
-                </p>
-                <th:block th:if="*{level.name() == 'ADVANCED'}">
-                    <p>
-                        <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
-                    </p>
-                    <p>
-                        <img class="level-img" th:src="@{/images/difficulty-level.png}" alt="">
-                    </p>
-                </th:block>
+        <!-- Difficulty -->
+        <div class="sidebar-card">
+            <div class="sidebar-card-title" th:text="#{route.details.difficulty}">Difficulty</div>
+            <div class="difficulty-pips">
+                <div class="difficulty-pip active"></div>
+                <div class="difficulty-pip" th:classappend="*{level.name() == 'INTERMEDIATE' or level.name() == 'EXPERT'} ? 'active'"></div>
+                <div class="difficulty-pip" th:classappend="*{level.name() == 'EXPERT'} ? 'active'"></div>
+            </div>
+            <div style="margin-top:var(--sp-sm); font-size:.85rem; color:var(--clr-muted)" th:text="#{level.__${routeDetails.level.name()}__}">BEGINNER</div>
+        </div>
+
+        <!-- Upload picture (owner only) -->
+        <div class="sidebar-card" sec:authorize="isAuthenticated()"
+             th:if="${#authentication.principal.id == routeDetails.authorId}">
+            <div class="sidebar-card-title" th:text="#{route.details.upload.title}">Upload Photo</div>
+            <form th:action="@{/images/upload}" th:method="post" enctype="multipart/form-data">
+                <input type="hidden" name="routeId" id="route-id" th:value="*{id}">
+                <div class="upload-area" onclick="document.getElementById('picture').click()">
+                    <img th:src="@{/images/add-img.png}" alt="upload">
+                    <span style="font-size:.82rem; color:var(--clr-muted)" th:text="#{route.details.upload.click}">Click to choose a photo</span>
+                </div>
+                <input style="display:none" id="picture" type="file" name="picture"
+                       accept="image/jpeg,image/jpg,image/png" required/>
+                <button type="submit" class="btn btn-primary btn-sm upload-hover" style="width:100%; margin-top:var(--sp-sm); justify-content:center">
+                    <i class="fas fa-cloud-upload-alt"></i> <span th:text="#{route.details.upload.btn}">Upload</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Login to upload (guests) -->
+        <div class="sidebar-card" sec:authorize="!isAuthenticated()">
+            <div class="sidebar-card-title" th:text="#{route.details.share-photo}">Share a Photo</div>
+            <a th:href="@{/users/login}" class="btn btn-outline btn-sm" style="width:100%; justify-content:center">
+                <i class="fas fa-sign-in-alt"></i> <span th:text="#{route.details.login-upload}">Login to Upload</span>
+            </a>
+        </div>
+
+        <!-- Delete route (author or admin) -->
+        <div class="sidebar-card"
+             th:if="${#authentication != null and #authentication.principal != 'anonymousUser'
+                      and (routeDetails.authorId == #authentication.principal.id
+                           or #authorization.expression('hasRole(''ADMIN'')'))}">
+            <div class="sidebar-card-title" th:text="#{route.details.manage}">Manage Route</div>
+            <form th:action="@{/routes/delete/{id}(id=${routeDetails.id})}"
+                  th:method="delete"
+                  th:onsubmit="|return confirm('#{route.details.delete.confirm}')|">
+                <button type="submit" class="btn btn-danger btn-sm" style="width:100%; justify-content:center">
+                    <i class="fas fa-trash"></i> <span th:text="#{route.details.delete}">Delete Route</span>
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <div class="route-main-content">
+
+        <!-- Gallery -->
+        <div class="content-panel" th:if="*{!pictureUrls.isEmpty()}">
+            <div class="content-panel-header">
+                <i class="fas fa-images"></i> <span th:text="#{route.details.photos}">Photos</span>
+            </div>
+            <div class="content-panel-body">
+                <div class="photo-grid">
+                    <img class="rounded" th:each="p : *{pictureUrls}" th:src="@{${p}}" th:alt="*{name}" alt="">
+                </div>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div class="content-panel">
+            <div class="content-panel-header">
+                <i class="fas fa-map"></i> <span th:text="#{route.details.map}">Interactive Map</span>
+            </div>
+            <section id="map"></section>
+        </div>
+
+        <!-- Description -->
+        <div class="content-panel">
+            <div class="content-panel-header" style="justify-content:space-between">
+                <span><i class="fas fa-align-left"></i> <span th:text="#{route.details.description}">Description</span></span>
+                <button class="btn btn-ghost btn-sm" id="translate-desc-btn"
+                        th:if="${#locale.language == 'bg'}"
+                        th:attr="data-translate-label=#{route.details.translate},
+                                 data-translating-label=#{route.details.comment.translating},
+                                 data-show-original-label=#{route.details.comment.show-original}">
+                    <i class="fas fa-language"></i> <span th:text="#{route.details.translate}">Translate to English</span>
+                </button>
+            </div>
+            <div class="content-panel-body">
+                <p class="route-description-text" id="route-description" th:text="*{description}">Description</p>
+            </div>
+        </div>
+
+        <!-- Video -->
+        <div class="content-panel" th:if="*{videoUrl != null and !videoUrl.isEmpty()}">
+            <div class="content-panel-header">
+                <i class="fab fa-youtube"></i> <span th:text="#{route.details.video}">Video</span>
+            </div>
+            <section id="video">
+                <iframe id="frame" th:src="@{'https://www.youtube.com/embed/' + *{videoUrl}}"
+                        allowfullscreen></iframe>
+            </section>
+        </div>
+
+        <!-- Comments -->
+        <div class="content-panel">
+            <div class="content-panel-header">
+                <i class="fas fa-comments"></i> <span th:text="#{route.details.comments}">Comments</span>
+            </div>
+            <div class="content-panel-body">
+
+                <!-- Post comment form -->
+                <div class="comment-form-area" sec:authorize="isAuthenticated()" style="margin-bottom:var(--sp-xl)">
+                    <form id="comment-form" th:method="post" th:action="@{/api/comment}">
+                        <div class="form-field">
+                            <label for="comment" th:text="#{route.details.comment.label}">Leave a comment</label>
+                            <textarea name="comment" id="comment" rows="4" th:placeholder="#{route.details.comment.placeholder}"></textarea>
+                            <small id="messageError" class="field-error" style="display:none">
+                                <i class="fas fa-exclamation-circle"></i> <span th:text="#{route.details.comment.error}">Message should be at least 10 characters.</span>
+                            </small>
+                        </div>
+                        <div style="margin-top:var(--sp-md)">
+                            <input type="submit" class="btn btn-primary" id="post-comment" th:value="#{route.details.comment.post}"/>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Login prompt for guests -->
+                <div sec:authorize="!isAuthenticated()" style="margin-bottom:var(--sp-xl)">
+                    <a th:href="@{/users/login}" class="btn btn-outline" id="login-to-upload-comment">
+                        <i class="fas fa-sign-in-alt"></i> <span th:text="#{route.details.comment.login}">Login to Comment</span>
+                    </a>
+                </div>
+
+                <!-- Dynamic comment list -->
+                <div id="comment-control-section"></div>
 
             </div>
-
-
-            <div sec:authorize="isAuthenticated()">
-                <h4>Choose picture</h4>
-                <form th:action="@{/images/upload}"
-                      th:method="post"
-                      enctype="multipart/form-data">
-                    <input type="hidden" name="routeId" id="route-id" th:value="*{id}">
-                    <div class="image-upload">
-                        <label for="picture" class="upload-pic">
-                            <img th:src="@{/images/add-img.png}" src="" alt=""/>
-                        </label>
-                        <input style="display: none"
-                               id="picture"
-                               type="file"
-                               name="picture"
-                               accept="image/jpeg,image/jpg,image/png"
-                               required/>
-                    </div>
-
-                    <div class="form-group">
-                        <button class="btn-primary upload-hover rounded">Upload Picture</button>
-                    </div>
-
-                </form>
-            </div>
-            <div class="form-group" sec:authorize="!isAuthenticated()">
-                <a type="button" class="btn upload-hover text-white" id="login-to-upload-pic" th:href="@{/users/login}">
-                    Register or Login to Upload Picture
-                </a>
-            </div>
-
-
-        </section>
-
-        <section id="map"></section>
-
-        <section id="video">
-            <iframe id="frame" th:src="@{'https://www.youtube.com/embed/' + *{videoUrl}}">
-            </iframe>
-        </section>
-
-        <section class="route-description text-center">
-            <h4>Description</h4>
-            <p id="route-description" class="text-left" th:text="*{description}">Description: </p>
-        </section>
-
-        <section class="gallery">
-            <img class="rounded" th:each="p : *{pictureUrls}" th:src="@{${p}}" height="100%" th:alt="*{name}" alt="">
-        </section>
-
-        <section class="comments">
-            <h1>Comments</h1>
-
-            <div>
-                <form id="comment-form"
-                      th:method="post"
-                      th:action="@{/api/comment}">
-
-
-                    <div class="form-group" sec:authorize="isAuthenticated()">
-                        <h4>Leave a comment</h4>
-
-                        <label for="comment">Message</label>
-                        <textarea name="comment"
-                                  id="comment"
-                                  cols="30"
-                                  rows="5"
-                                  class="form-control"
-                                  style="background-color: white;">
-                        </textarea>
-
-                        <small id="messageError" class="invalid-feedback">
-                            Message should be at least 10 characters.
-                        </small>
-                    </div>
-
-                    <div class="form-group" sec:authorize="isAuthenticated()">
-                        <input type="submit"
-                               class="btn"
-                               id="post-comment"
-                               value="Post Comment"/>
-                    </div>
-                    <div class="form-group" sec:authorize="!isAuthenticated()">
-                        <a type="button" class="btn upload-hover text-white" id="login-to-upload-comment"
-                           th:href="@{/users/login}">
-                            Register or Login to Comment
-                        </a>
-                    </div>
-                </form>
-            </div>
-
-
-            <div>
-                <span id="comment-control-section"></span>
-            </div>
-        </section>
-
-        <p style="visibility: hidden">GPX Download:
-            <a id="gpx-download"></a>
-        </p>
+        </div>
 
     </div>
-
 </div>
-<footer th:replace="~{fragments/commons::footer}">
-</footer>
+
+<p style="display:none">GPX: <a id="gpx-download"></a></p>
+
+<footer th:replace="~{fragments/commons::footer}"></footer>
 
 </body>
 </html>

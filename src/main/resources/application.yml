@@ -12,19 +12,17 @@ spring:
 #  cloud:
 #    vault:
 #      uri: http://127.0.0.1:8200
-#      token: hvs.CBJkEIngBjsD5AIHM2sRSCcH
 #      kv:
 #        enabled: true
 #      application-name: pathfinder
 #  config:
 #    import: vault://
   datasource:
-    url: jdbc:mysql://localhost:3306/pathfinder?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/pathfinder?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USER}
     password: ${DB_PASS}
   thymeleaf: # Thymeleaf
-    cache: false
     mode: HTML
     encoding: UTF-8
     prefix: classpath:/templates/
@@ -72,9 +70,13 @@ route:
       size: 11
 
 pathfinder:
-  remember-me-key: ${REMEMBER_ME_KEY:topsecret}
-  encode: false
-  passwords-count: 50
+  remember-me-key: ${REMEMBER_ME_KEY}
+  libretranslate-url: ${LIBRETRANSLATE_URL:http://localhost:5000}
+  gpx-storage-path: ${GPX_STORAGE_PATH:./gpx-data/}
+  mapbox-token: ${MAPBOX_TOKEN:}
+  weather:
+    api-key: ${OPENWEATHER_API_KEY:}
+    cities: Sofia,Varna,Plovdiv,Burgas,Veliko Tarnovo
 
 #  https://bgmountains.org/bg/
 

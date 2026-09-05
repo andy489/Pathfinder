@@ -33,7 +33,7 @@ public class MostCommentedRouteView {
                 routeEntity.getName(),
                 routeEntity.getPictures().stream().map(PictureEntity::getUrl).findAny().orElseGet(
                         () -> RouteService.DEFAULT_PIC_URL),
-                routeEntity.getComments().stream().filter(CommentEntity::getApproved).count()
+                routeEntity.getComments().stream().filter(c -> Boolean.TRUE.equals(c.getApproved())).count()
         );
     }
 }

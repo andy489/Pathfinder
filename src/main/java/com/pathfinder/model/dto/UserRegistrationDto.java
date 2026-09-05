@@ -16,7 +16,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -43,7 +43,7 @@ public class UserRegistrationDto {
     @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @MinAge
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @NotBlank
     @Email
@@ -54,6 +54,8 @@ public class UserRegistrationDto {
     @Size(min = 4, max = 20, message = "{user.password.size}")
     private String password;
 
+    @NotBlank
+    @Size(min = 4, max = 20, message = "{user.password.size}")
     private String confirmPassword;
 
     @Override

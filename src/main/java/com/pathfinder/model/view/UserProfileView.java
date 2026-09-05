@@ -19,8 +19,6 @@ public class UserProfileView {
 
     private String username;
 
-    private String password;
-
     private String email;
 
     private Integer age;

@@ -99,7 +99,16 @@ public class SuperUserController extends GenericController {
         from = from.toUpperCase();
         to = to.toUpperCase();
 
-        superuserService.togglePermUser(userId, UserRoleEnum.valueOf(from), UserRoleEnum.valueOf(to));
+        UserRoleEnum fromRole;
+        UserRoleEnum toRole;
+        try {
+            fromRole = UserRoleEnum.valueOf(from);
+            toRole = UserRoleEnum.valueOf(to);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        superuserService.togglePermUser(userId, fromRole, toRole);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

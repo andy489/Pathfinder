@@ -18,7 +18,7 @@ public class RouteRestController {
     }
 
     @GetMapping("/api/routes/coordinates/{id}")
-    private ResponseEntity<MapCoordinatesDto> getRouteCoordinates(@PathVariable("id") Long routeId) {
+    public ResponseEntity<MapCoordinatesDto> getRouteCoordinates(@PathVariable("id") Long routeId) {
 
         return ResponseEntity.ok(routeService.getCoordinates(routeId));
 

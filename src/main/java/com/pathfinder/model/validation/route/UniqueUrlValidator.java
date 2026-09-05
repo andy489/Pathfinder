@@ -14,7 +14,7 @@ public class UniqueUrlValidator implements ConstraintValidator<UniqueUrl, String
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value.isEmpty() || value.isBlank()) {
+        if (value == null || value.isBlank()) {
             return true;
         }
 

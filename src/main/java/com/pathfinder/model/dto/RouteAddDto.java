@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
@@ -32,7 +31,7 @@ public class RouteAddDto {
     private String name;
 
     @NotBlank
-    @Size(min = 4, message = "{route.description.size}")
+    @Size(min = 4, max = 2000, message = "{route.description.size}")
     private String description;
 
     @CustomFile(contentTypes = {"text/xml"})
@@ -41,9 +40,7 @@ public class RouteAddDto {
     @NotNull
     private LevelEnum level;
 
-    //    @EmptyOrExactSizeString(message = "{route.video-url.exact-size}")
-    @URL
-    @Pattern(regexp = "http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?‌​[\\w\\?‌​=]*)?",
+    @Pattern(regexp = "^$|https?://(?:www\\.)?youtu(?:be\\.com/watch\\?v=|\\.be/)([\\w\\-_]*)(?:&(?:amp;)?[\\w?=]*)?",
             message = "Invalid youtube URL provided")
     @UniqueUrl(message = "{route.video-url.unique}")
     private String videoUrl;

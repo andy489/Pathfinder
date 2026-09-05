@@ -18,18 +18,50 @@ services:
       timeout: 20s
       retries: 10
 
+  app:
+    build: .
+    restart: on-failure:2
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/${DB_NAME}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    depends_on:
+      mysql:
+        condition: service_healthy
+    profiles:
+      - full
+
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    restart: on-failure:2
+    ports:
+      - "5000:5000"
+    environment:
+      - LT_LOAD_ONLY=en,bg
+      - LT_UPDATE_MODELS=false
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sf http://localhost:5000/languages || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 60s
+    profiles:
+      - translate
+
 volumes:
   mysql_data:
 
-# open -a docker
-# docker-compose up -d
-## docker-compose --env-file .env up -d
-# docker logs mysql
-# docker-compose down
-
-#Connect to MySQL in Sequel Ace with these settings:
-#Host: 127.0.0.1
-#Port: 3306
-#Username: ${DB_USER} (from your .env file)
-#Password: ${DB_PASS} (from your .env file)
-#Database: pathfinder
+# Local dev (DB only — app runs via ./gradlew bootRun):
+#   docker-compose up -d
+#
+# Full stack in Docker (app + DB):
+#   docker-compose --profile full up -d
+#
+# Include LibreTranslate fallback (optional — Google Translate is the primary):
+#   docker-compose --profile full --profile translate up -d
+#
+# Connect to MySQL in Sequel Ace:
+#   Host: 127.0.0.1  Port: 3306
+#   User/Password: from .env  Database: pathfinder

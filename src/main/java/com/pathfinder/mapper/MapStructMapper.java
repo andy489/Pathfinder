@@ -30,6 +30,7 @@ public interface MapStructMapper {
     @Mapping(target = "level", ignore = true)
     UserEntity toEntity(UserRegistrationDto userRegistrationDto);
 
+    @Mapping(target = "age", ignore = true)
     UserProfileView toView(UserEntity userEntity);
 
     @Mapping(target = "pictureUrl", ignore = true)
@@ -62,8 +63,6 @@ public interface MapStructMapper {
     @Mapping(target = "approved", constant = "false")
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "route", ignore = true)
-    @Mapping(target = "modified", expression = "java(java.time.LocalDateTime.now())")
-    @Mapping(target = "created", expression = "java(java.time.LocalDateTime.now())")
     CommentEntity toEntity(CommentCreationDto commentDto);
 
     @Mapping(target = "commentId", source = "id")

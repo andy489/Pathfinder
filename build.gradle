@@ -27,8 +27,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.48'
+    annotationProcessor 'org.projectlombok:lombok:1.18.48'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -38,6 +38,7 @@ dependencies {
     implementation 'org.liquibase:liquibase-core:4.23.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
@@ -46,7 +47,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    implementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'com.cloudinary:cloudinary-core'
     implementation 'com.cloudinary:cloudinary-http44:1.35.0'
@@ -56,6 +57,26 @@ dependencies {
 //    implementation 'org.springframework.cloud:spring-cloud-vault-config:4.1.0'
 }
 
+def loadEnv() {
+    def envFile = rootProject.file('.env')
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            def trimmed = line.trim()
+            if (trimmed && !trimmed.startsWith('#') && trimmed.contains('=')) {
+                def (key, value) = trimmed.split('=', 2)
+                System.setProperty(key.trim(), value.trim())
+            }
+        }
+    }
+}
+
+loadEnv()
+
+tasks.named('bootRun') {
+    systemProperties System.properties
+}
+
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperties System.properties
 }

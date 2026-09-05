@@ -3,35 +3,84 @@
 
 <head th:replace="~{fragments/commons::head}"></head>
 
+<script defer th:src="@{/js/custom/translate.js}"></script>
+
 <body>
-<div class="wrapper">
-    <header th:replace="~{fragments/commons::navigation}"></header>
 
-    <section class="road"
-             th:each="r : ${allRoutesViewModel}"
-             th:object="${r}">
+<header th:replace="~{fragments/commons::navigation}"></header>
 
-        <img th:src="*{pictureUrl}" alt="Title image">
-
-        <div style="height:400px; overflow:auto;">
-            <h2 th:text="*{name}">
-                Your Route
-            </h2>
-
-            <p th:text="*{#strings.abbreviate(description, 600)}">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Vitae alias reiciendis deleniti possimus nemo non repellendus?
-                Quae atque vero modi quidem! Autem cupiditate fugit doloribus ad amet,
-                asperiores provident commodi.
-            </p>
-            <a th:href="@{/routes/details/{id}(id = *{id})}" class="btn">Learn More</a>
-        </div>
-    </section>
-
+<!-- Page Header -->
+<div class="routes-page-header">
+    <div class="container">
+        <h1 class="routes-page-title"><i class="fas fa-map-marked-alt"></i> <span th:text="#{routes.title}">All Routes</span></h1>
+        <p class="routes-page-subtitle" th:text="#{routes.subtitle}">Discover hiking, cycling and driving routes across Bulgaria</p>
+        <form th:action="@{/routes/all}" method="get" class="search-bar">
+            <input type="text" name="q"
+                   th:placeholder="#{routes.search.placeholder}"
+                   th:value="${searchQuery}">
+            <button type="submit"><i class="fas fa-search"></i> <span th:text="#{routes.search.button}">Search</span></button>
+            <a th:href="@{/routes/all}" class="btn-clear"
+               th:if="${searchQuery != null and !searchQuery.isEmpty()}">
+                <i class="fas fa-times"></i> <span th:text="#{routes.search.clear}">Clear</span>
+            </a>
+        </form>
+    </div>
 </div>
 
-</body>
+<!-- Routes Grid -->
+<div style="padding: var(--sp-2xl) 0; flex: 1">
+    <div class="container">
+
+        <p th:if="${allRoutesViewModel.isEmpty()}" class="text-muted text-center" style="padding: var(--sp-2xl) 0">
+            <i class="fas fa-search" style="font-size:2rem; opacity:.3; display:block; margin-bottom:var(--sp-md)"></i>
+            <span th:text="#{routes.empty}">No routes found.</span>
+        </p>
+
+        <div class="routes-grid">
+            <div class="route-card" th:each="r : ${allRoutesViewModel}" th:object="${r}">
+                <a th:href="@{/routes/details/{id}(id=*{id})}" class="route-card-link">
+                    <div class="route-card-img">
+                        <img th:src="*{pictureUrl}" th:alt="*{name}" alt="route">
+                    </div>
+                    <div class="route-card-body">
+                        <h3 class="route-card-title" data-translatable th:text="*{name}">Route Name</h3>
+                        <p class="route-card-desc" data-translatable th:text="*{#strings.abbreviate(description, 160)}">Description</p>
+                    </div>
+                </a>
+                <div class="route-card-footer">
+                    <span class="level-badge"
+                          th:classappend="*{level.name() == 'BEGINNER'} ? 'beginner' : (*{level.name() == 'INTERMEDIATE'} ? 'intermediate' : 'expert')"
+                          th:text="#{level.__${r.level.name()}__}">BEGINNER</span>
+                    <a th:href="@{/routes/details/{id}(id=*{id})}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-arrow-right"></i> <span th:text="#{routes.details}">Details</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div th:if="${routesPage != null and routesPage.totalPages > 1}" class="pagination-row">
+            <a class="btn btn-ghost btn-sm"
+               th:classappend="${routesPage.first} ? 'disabled'"
+               th:href="@{/routes/all(page=${routesPage.number - 1})}">
+                <i class="fas fa-chevron-left"></i> <span th:text="#{routes.pagination.prev}">Prev</span>
+            </a>
+            <a class="btn btn-sm"
+               th:each="i : ${#numbers.sequence(0, routesPage.totalPages - 1)}"
+               th:classappend="${i == routesPage.number} ? 'btn-primary' : 'btn-ghost'"
+               th:href="@{/routes/all(page=${i})}"
+               th:text="${i + 1}">1</a>
+            <a class="btn btn-ghost btn-sm"
+               th:classappend="${routesPage.last} ? 'disabled'"
+               th:href="@{/routes/all(page=${routesPage.number + 1})}">
+                <span th:text="#{routes.pagination.next}">Next</span> <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+
+    </div>
+</div>
 
 <footer th:replace="~{fragments/commons::footer}"></footer>
 
+</body>
 </html>

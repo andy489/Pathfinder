@@ -31,7 +31,7 @@ public class CommentEntity extends GenericEntity {
     @UpdateTimestamp
     private LocalDateTime modified;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String comment;
 
     @ManyToOne
@@ -42,6 +42,6 @@ public class CommentEntity extends GenericEntity {
     private RouteEntity route;
 
     public void toggleApprove() {
-        approved = !approved;
+        approved = !Boolean.TRUE.equals(approved);
     }
 }

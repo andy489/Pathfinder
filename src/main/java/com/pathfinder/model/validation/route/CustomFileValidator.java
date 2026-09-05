@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class CustomFileValidator implements ConstraintValidator<CustomFile, MultipartFile> {
 
@@ -25,9 +24,17 @@ public class CustomFileValidator implements ConstraintValidator<CustomFile, Mult
 
     @Override
     public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
+        if (file == null || file.isEmpty()) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("File is required").addConstraintViolation();
+            return false;
+        }
 
-        if (Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            return true;
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || originalFilename.isBlank()) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("File must have a valid name").addConstraintViolation();
+            return false;
         }
 
         String errMsg = getErrMsg(file);
@@ -43,10 +50,6 @@ public class CustomFileValidator implements ConstraintValidator<CustomFile, Mult
     }
 
     private String getErrMsg(MultipartFile file) {
-        if (file.isEmpty()) {
-            return "file must not be empty";
-        }
-
         if (file.getSize() > size) {
             return "Exceeded file size. Max size: " + size;
         }

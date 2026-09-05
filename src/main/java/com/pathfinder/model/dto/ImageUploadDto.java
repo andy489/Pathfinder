@@ -1,6 +1,7 @@
 package com.pathfinder.model.dto;
 
 import com.pathfinder.model.validation.route.CustomFile;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Accessors(chain = true)
 public class ImageUploadDto {
 
+    @NotNull
     private Long routeId;
 
     @CustomFile(contentTypes = {"image/png", "image/jpeg", "image/jpg"})

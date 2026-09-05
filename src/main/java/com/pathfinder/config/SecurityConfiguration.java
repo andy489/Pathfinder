@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
@@ -39,6 +40,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http // .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/translate"))
                 // defines which pages will be authorized
                 .authorizeHttpRequests((auth) -> {
                     auth
@@ -56,11 +58,12 @@ public class SecurityConfiguration {
                                     "/users/login-error",
                                     "/about").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/translate").permitAll()
                             .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-                            .requestMatchers("/superuser/comments/*").hasAnyRole(
+                            .requestMatchers("/superuser/comments/**").hasAnyRole(
                                     UserRoleEnum.ADMIN.name(),
                                     UserRoleEnum.MODERATOR.name()
-                            ).requestMatchers("/superuser/permissions/*").hasRole(
+                            ).requestMatchers("/superuser/permissions/**").hasRole(
                                     UserRoleEnum.ADMIN.name()
                             )
                             .requestMatchers("/routes/add").authenticated()

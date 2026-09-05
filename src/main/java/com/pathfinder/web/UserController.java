@@ -1,11 +1,13 @@
 package com.pathfinder.web;
 
+import com.pathfinder.model.dto.UserEditDto;
 import com.pathfinder.model.dto.UserRegistrationDto;
 import com.pathfinder.service.UserService;
+import com.pathfinder.model.user.PathfinderUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
@@ -24,13 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/users")
 public class UserController extends GenericController {
 
-    private static final String BINDING_RESULT_PATH = "org.springframework.validation.BindingResult.";
-
     private final UserService userService;
 
     private final SecurityContextRepository securityContextRepository;
 
-    @Autowired
     public UserController(UserService userService, SecurityContextRepository securityContextRepository) {
         this.userService = userService;
         this.securityContextRepository = securityContextRepository;
@@ -95,9 +94,47 @@ public class UserController extends GenericController {
         return super.redirect("/users/login");
     }
 
-    @GetMapping("/profile")
-    private ModelAndView profile() {
+    @ModelAttribute(name = "userEditModel")
+    public UserEditDto initUserEditDto() {
+        return new UserEditDto();
+    }
 
-        return super.view("profile");
+    @GetMapping("/profile")
+    public ModelAndView profile(@AuthenticationPrincipal PathfinderUserDetails userDetails,
+                                ModelAndView modelAndView) {
+        modelAndView.addObject("userEditModel",
+                new UserEditDto().setFullName(userDetails.getFullName()).setEmail(userDetails.getEmail()));
+        return super.view("profile", modelAndView);
+    }
+
+    @PostMapping("/profile/edit")
+    public ModelAndView editProfile(
+            @Valid @ModelAttribute(name = "userEditModel") UserEditDto userEditDto,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal PathfinderUserDetails userDetails,
+            RedirectAttributes redirectAttributes) {
+
+        String newPw = userEditDto.getNewPassword();
+        String confirmPw = userEditDto.getConfirmPassword();
+        if (newPw != null && !newPw.isBlank() &&
+                confirmPw != null && !newPw.equals(confirmPw)) {
+            bindingResult.rejectValue("confirmPassword", "passwords.mismatch", "Passwords do not match");
+        }
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userEditModel", userEditDto)
+                    .addFlashAttribute(BINDING_RESULT_PATH + "userEditModel", bindingResult);
+            return super.redirect("/users/profile");
+        }
+
+        try {
+            userService.updateProfile(userDetails.getId(), userEditDto);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("userEditModel", userEditDto)
+                    .addFlashAttribute("editError", e.getMessage());
+            return super.redirect("/users/profile");
+        }
+        redirectAttributes.addFlashAttribute("editSuccess", true);
+        return super.redirect("/users/profile");
     }
 }

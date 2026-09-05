@@ -1,46 +1,55 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/commons::head}"></head>
 
 <body>
 
-<div class="wrapper">
-    <!-- Navigation -->
-    <header th:replace="~{fragments/commons::navigation}"></header>
+<header th:replace="~{fragments/commons::navigation}"></header>
 
-    <div class="info">
-        <div></div>
-        <div>
-            <h4>За нас</h4>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque consectetur consequuntur dolores error est
-            fugit
-            illo illum iure libero, necessitatibus, nihil possimus recusandae repudiandae sapiente similique sunt
-            tenetur
-            veniam voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam aspernatur autem
-            beatae,
-            consequuntur cupiditate dolorem dolores error et expedita hic impedit in iusto magni mollitia neque nihil
-            nisi
-            officiis omnis placeat quaerat qui quod rem rerum saepe sapiente sed similique tempore temporibus tenetur
-            totam
-            ut vel velit, voluptatum! Architecto blanditiis commodi, dolore doloribus eos esse excepturi fugiat hic ipsa
-            iste itaque iure laboriosam libero nihil, pariatur quam qui quidem, quo quos repellendus temporibus ut
-            veniam
-            voluptates. Aperiam beatae ducimus, eius enim, esse, fuga nemo nisi porro provident reiciendis tempore
-            voluptas
-            voluptate voluptatem. Asperiores corporis deserunt, dolor, earum enim laborum maiores minima mollitia porro,
-            possimus rerum sint soluta. Assumenda atque aut dolor enim inventore iure minima, molestiae optio quidem
-            quod,
-            recusandae reprehenderit sunt totam. Accusantium at dicta dignissimos doloribus ducimus natus obcaecati.
-        </div>
-        <div></div>
+<div class="about-hero">
+    <div class="container">
+        <h1><i class="fas fa-mountain"></i> <span th:text="#{about.title}">About Us</span></h1>
+        <p th:text="#{about.subtitle}">Pathfinder is a platform for sharing and discovering routes across Bulgaria.</p>
     </div>
-
 </div>
 
-</body>
+<section style="padding: var(--sp-3xl) 0; flex:1">
+    <div class="container">
+        <div class="about-features">
+            <div class="about-feature-card">
+                <div class="about-feature-icon">&#127956;</div>
+                <h3 class="about-feature-title" th:text="#{about.feature.routes.title}">Real Routes</h3>
+                <p class="about-feature-desc" th:text="#{about.feature.routes.desc}">
+                    Every route is added by a real user with a GPX track, interactive map and description.
+                </p>
+            </div>
+            <div class="about-feature-card">
+                <div class="about-feature-icon">&#128506;</div>
+                <h3 class="about-feature-title" th:text="#{about.feature.maps.title}">Interactive Maps</h3>
+                <p class="about-feature-desc" th:text="#{about.feature.maps.desc}">
+                    Every route is visualised on OpenStreetMap with the full GPX track, distance and start point.
+                </p>
+            </div>
+            <div class="about-feature-card">
+                <div class="about-feature-icon">&#128247;</div>
+                <h3 class="about-feature-title" th:text="#{about.feature.photos.title}">Photos &amp; Video</h3>
+                <p class="about-feature-desc" th:text="#{about.feature.photos.desc}">
+                    Authors upload photos and attach YouTube videos to give a full picture before you set off.
+                </p>
+            </div>
+            <div class="about-feature-card">
+                <div class="about-feature-icon">&#128172;</div>
+                <h3 class="about-feature-title" th:text="#{about.feature.community.title}">Community</h3>
+                <p class="about-feature-desc" th:text="#{about.feature.community.desc}">
+                    Leave comments, share impressions and help fellow travellers choose the right route.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <footer th:replace="~{fragments/commons::footer}"></footer>
 
+</body>
 </html>

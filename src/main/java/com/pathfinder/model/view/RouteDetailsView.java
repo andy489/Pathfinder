@@ -14,6 +14,8 @@ public class RouteDetailsView {
 
     private Long id;
 
+    private Long authorId;
+
     private String gpxCoordinates;
 
     private LevelEnum level;

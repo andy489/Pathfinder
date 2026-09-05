@@ -1,5 +1,6 @@
 package com.pathfinder.model.view;
 
+import com.pathfinder.model.enumerated.LevelEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -16,4 +17,6 @@ public class RouteIndexView {
     private String description;
 
     private String pictureUrl;
+
+    private LevelEnum level;
 }

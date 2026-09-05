@@ -15,9 +15,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 @Entity
@@ -33,7 +32,7 @@ public class UserEntity extends GenericEntity {
     private String fullName;
 
     @Column(nullable = false)
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Column(nullable = false, unique = true)
     private String email;

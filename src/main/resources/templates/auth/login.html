@@ -5,65 +5,52 @@
 
 <body>
 
-<main class="p-5 align-content-center bg-blur my-register-div">
+<header th:replace="~{fragments/commons::navigation}"></header>
 
-    <header th:replace="~{fragments/commons::navigation}"></header>
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div class="auth-logo-mark"><i class="fas fa-route"></i></div>
+            <h1 class="auth-title" th:text="#{login.title}">Welcome back</h1>
+            <p class="auth-subtitle" th:text="#{login.subtitle}">Sign in to your Pathfinder account</p>
+        </div>
 
-    <h1 class="border-bottom mb-5">Login</h1>
-    <div class="d-flex justify-content-center">
-        <div class="row g-3 align-items-center">
+        <form th:action="@{/users/login}" th:method="post" class="auth-form">
 
-            <form th:action="${loginProcessingUrl}"
-                  th:method="post">
-                <div>
-                    <div class="col-auto">
-                        <label for="input-username" class="col-form-label ">Username</label>
-                    </div>
-                    <div class="col-auto">
-                        <input type="text"
-                               name="username"
-                               th:value="${username}"
-                               id="input-username"
-                               class="form-control"
-                               aria-describedby="usernameHelpInline"/>
-                    </div>
-                </div>
-                <div>
-                    <div class="col-auto">
-                        <label for="input-password" class="col-form-label ">Password</label>
-                    </div>
-                    <div class="col-auto">
-                        <input type="password"
-                               name="password"
-                               id="input-password"
-                               class="form-control"
-                               aria-describedby="passwordHelpInline"/>
-                    </div>
-                </div>
+            <div th:if="${bad_credentials}" class="alert-error">
+                <i class="fas fa-exclamation-circle"></i> <span th:text="#{login.error}">Invalid username or password.</span>
+            </div>
 
-                <div>
-                    <div class="col-auto">
-                        <input id="remember-me" type="checkbox" name="remember-me-par">
-                        <label for="remember-me" class="col-form-label">Remember Me</label>
-                    </div>
-                </div>
+            <div class="form-field">
+                <label for="input-username" th:text="#{login.username}">Username</label>
+                <input type="text" name="username" th:value="${username}"
+                       id="input-username" th:placeholder="#{login.username.placeholder}" autocomplete="username">
+            </div>
 
-                <p th:if="${bad_credentials}"
-                   class="errors alert alert-danger">
-                    Invalid username or password.
-                </p>
+            <div class="form-field">
+                <label for="input-password" th:text="#{login.password}">Password</label>
+                <input type="password" name="password" id="input-password"
+                       placeholder="••••••••" autocomplete="current-password">
+            </div>
 
-                <div class="d-flex justify-content-center mt-2">
-                    <button class="btn btn-primary btn-block w-50" type="submit">Login</button>
-                </div>
+            <div class="checkbox-row">
+                <input id="remember-me" type="checkbox" name="remember-me-par">
+                <label for="remember-me" th:text="#{login.remember-me}">Remember me for 1 hour</label>
+            </div>
 
-            </form>
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-sign-in-alt"></i> <span th:text="#{login.submit}">Sign In</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <span th:text="#{login.no-account}">Don't have an account?</span>
+            <a th:href="@{/users/register}" th:text="#{login.create}">Create one</a>
         </div>
     </div>
-</main>
+</div>
 
 <footer th:replace="~{fragments/commons::footer}"></footer>
 
 </body>
-
 </html>

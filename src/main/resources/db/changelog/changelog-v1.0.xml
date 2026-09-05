@@ -383,4 +383,1119 @@
         </loadData>
     </changeSet>
 
+    <changeSet author="andy489" id="39">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="routes" columnName="gpx_coordinates"/>
+        </preConditions>
+        <modifyDataType tableName="routes" columnName="gpx_coordinates" newDataType="VARCHAR(100)"/>
+    </changeSet>
+
+    <changeSet author="andy489" id="40">
+        <insert tableName="routes">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="Златни мостове - Черни връх"/>
+            <column name="description" value="Един от най-популярните маршрути на Витоша започва от природната забележителност Златни мостове — огромни речни камъни, наредени като мост, на около 1450 м н.в. Пътеката следва билото на планината и постепенно се изкачва до най-високия връх — Черни връх (2290 м). Разстоянието е около 7.7 км с превишение от 864 м. Маршрутът предлага великолепни панорами към Софийското поле, Рила и Стара планина. Подходящ за пешеходци и планински колоездачи с добра физическа подготовка."/>
+            <column name="gpx_coordinates" value="zlatni_mostove_cherni_vrah_c4a1e8f2-7b3d.xml"/>
+            <column name="level" value="INTERMEDIATE"/>
+            <column name="video_url" value="ZzfeIuqbXE8"/>
+            <column name="author_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="41">
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="61"/>
+            <column name="title" value="Златни мостове - скалното образувание"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Golden_Bridges_Vitosha.jpg/1280px-Golden_Bridges_Vitosha.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="62"/>
+            <column name="title" value="Черни връх - върховият кръст"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Cherni_Vrah_peak_Vitosha.jpg/1280px-Cherni_Vrah_peak_Vitosha.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="63"/>
+            <column name="title" value="Витоша - зимна панорама"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Vitosha_winter_panorama.jpg/1280px-Vitosha_winter_panorama.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="42">
+        <insert tableName="comments">
+            <column name="id" valueNumeric="23"/>
+            <column name="created" valueDate="2024-04-10T10:15:00"/>
+            <column name="modified" valueDate="2024-04-10T10:15:00"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="comment" value="Чудесен маршрут! Камъните са просто невероятни, задължително трябва да се види. Изкачихме се с цялото семейство."/>
+            <column name="author_id" valueNumeric="3"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="24"/>
+            <column name="created" valueDate="2024-05-22T14:30:00"/>
+            <column name="modified" valueDate="2024-05-22T14:30:00"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="comment" value="Изкачихме върха за 3 часа и половина с кратка почивка при Златните мостове. Гледката от върха е невероятна, препоръчвам го на всички!"/>
+            <column name="author_id" valueNumeric="5"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="25"/>
+            <column name="created" valueDate="2024-06-08T09:45:00"/>
+            <column name="modified" valueDate="2024-06-08T09:45:00"/>
+            <column name="approved" valueBoolean="false"/>
+            <column name="comment" value="Много стръмно накрая преди върха, но гледката определено си струва усилието. Носете достатъчно вода и подходящи обувки."/>
+            <column name="author_id" valueNumeric="7"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="43">
+        <insert tableName="routes_categories">
+            <column name="route_id" valueNumeric="8"/>
+            <column name="category_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="routes_categories">
+            <column name="route_id" valueNumeric="8"/>
+            <column name="category_id" valueNumeric="4"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="44">
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/f/f5/Vitosha_Mountains.JPG"/>
+            <where>id = 61</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/a/af/View_from_Vitosha_Mountain_Sofia_03378.jpg"/>
+            <where>id = 62</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/4/4b/Sofia-vitosha-kempinski.jpg"/>
+            <where>id = 63</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="45">
+        <!-- Replace placeholder Vitosha images with actual Zlatni Mostove photos -->
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="64"/>
+            <column name="title" value="Златни мостове - Момина скала 1"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/02-07_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg/1280px-02-07_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="65"/>
+            <column name="title" value="Златни мостове - Момина скала 2"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/02-09_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg/1280px-02-09_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="66"/>
+            <column name="title" value="Златни мостове - Момина скала 3"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/02-17_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg/1280px-02-17_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="67"/>
+            <column name="title" value="Златни мостове - Момина скала 4"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/02-19_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg/1280px-02-19_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="68"/>
+            <column name="title" value="Златни мостове - Момина скала 5"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/02-25_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg/1280px-02-25_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5_-_%D0%9C%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BB%D0%B0.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="8"/>
+        </insert>
+        <!-- Replace descent clip with ascent walkthrough -->
+        <update tableName="routes">
+            <column name="video_url" value="5s06eqRxRXQ"/>
+            <where>id = 8</where>
+        </update>
+    </changeSet>
+
+
+    <changeSet author="andy489" id="46">
+        <!-- Replace all route 8 pictures with actual Zlatni Mostove stone boulder photos (01-XX series) -->
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/4/46/01-01_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5.jpg"/>
+            <where>id = 61</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/2/2c/01-03_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5.jpg"/>
+            <where>id = 62</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/86/01-05_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5.jpg"/>
+            <where>id = 63</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/85/01-06_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5.jpg"/>
+            <where>id = 64</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/2/2c/01-07_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5%2C_%D0%BF%D0%BE%D0%B3%D0%BB%D0%B5%D0%B4_%D0%BD%D0%B0%D0%B3%D0%BE%D1%80%D0%B5.jpg"/>
+            <where>id = 65</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/8a/01-08_%D0%97%D0%BB%D0%B0%D1%82%D0%BD%D0%B8_%D0%BC%D0%BE%D1%81%D1%82%D0%BE%D0%B2%D0%B5%2C_%D0%BF%D0%BE%D0%B3%D0%BB%D0%B5%D0%B4_%D0%BD%D0%B0%D0%B4%D0%BE%D0%BB%D1%83.jpg"/>
+            <where>id = 66</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/a/a9/Zlatnite_Mostove_-_Vitosha_2002.jpg"/>
+            <where>id = 67</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/c/cd/Zlatnite-Mostove.jpg"/>
+            <where>id = 68</where>
+        </update>
+        <!-- Replace ascent walkthrough with dedicated Zlatni Mostove stone river video -->
+        <update tableName="routes">
+            <column name="video_url" value="2KyYSF1as6Q"/>
+            <where>id = 8</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="47">
+        <!-- Rename placeholder usernames/names to realistic Bulgarian ones -->
+        <update tableName="users">
+            <column name="full_name" value="Александър Стоянов"/>
+            <column name="email" value="alex.stoyanov@pathfinder.bg"/>
+            <column name="username" value="astoyanov"/>
+            <where>id = 1</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Мартин Георгиев"/>
+            <column name="email" value="martin.georgiev@gmail.com"/>
+            <column name="username" value="mgeorgiev"/>
+            <where>id = 3</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Иван Христов"/>
+            <column name="email" value="ivan.hristov@abv.bg"/>
+            <column name="username" value="ivanhristov"/>
+            <where>id = 5</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Елена Петрова"/>
+            <column name="email" value="elena.petrova@gmail.com"/>
+            <column name="username" value="epetrova"/>
+            <where>id = 6</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Димитър Колев"/>
+            <column name="email" value="dimitar.kolev@gmail.com"/>
+            <column name="username" value="dkolev"/>
+            <where>id = 7</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Стефан Ангелов"/>
+            <column name="email" value="stefan.angelov@abv.bg"/>
+            <column name="username" value="sangelov"/>
+            <where>id = 8</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Радослав Попов"/>
+            <column name="email" value="radoslav.popov@gmail.com"/>
+            <column name="username" value="rpopov"/>
+            <where>id = 9</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Николета Иванова"/>
+            <column name="email" value="nikoleta.ivanova@abv.bg"/>
+            <column name="username" value="nivanova"/>
+            <where>id = 10</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Борислав Димитров"/>
+            <column name="email" value="borislav.dimitrov@gmail.com"/>
+            <column name="username" value="bdimitrov"/>
+            <where>id = 11</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Теодора Маринова"/>
+            <column name="email" value="teodora.marinova@gmail.com"/>
+            <column name="username" value="tmarinova"/>
+            <where>id = 12</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Христо Стоянов"/>
+            <column name="email" value="hristo.stoyanov@abv.bg"/>
+            <column name="username" value="hstoyanov"/>
+            <where>id = 13</where>
+        </update>
+        <update tableName="users">
+            <column name="full_name" value="Светлана Николова"/>
+            <column name="email" value="svetlana.nikolova@gmail.com"/>
+            <column name="username" value="snikolova"/>
+            <where>id = 14</where>
+        </update>
+        <!-- Fix SPAM comments and replace with realistic hiking feedback -->
+        <update tableName="comments">
+            <column name="comment" value="Минахме маршрута преди два дни. В делничните дни е тихо и почти пусто, което е много приятно. Маркировката при кръстовището след третия километър е избледняла — внимавайте да не изпуснете завоя."/>
+            <where>id = 7</where>
+        </update>
+        <update tableName="comments">
+            <column name="comment" value="Прекрасен ВелоЕрул! Минах го на хардтейл без проблеми. Единствено участъкът след село Ерул е кален след дъжд — препоръчвам да се изчака да изсъхне."/>
+            <where>id = 8</where>
+        </update>
+        <update tableName="comments">
+            <column name="comment" value="Страхотен маршрут за семейни излети. Асфалтовите участъци са безопасни дори за деца. Минахме го с 10-годишния ми син и той се справи отлично."/>
+            <where>id = 9</where>
+        </update>
+        <update tableName="comments">
+            <column name="comment" value="Бях там в началото на октомври. Гледката към Ерулска планина при залез е просто невероятна. Определено ще се върна следващото лято."/>
+            <where>id = 10</where>
+        </update>
+    </changeSet>
+
+
+    <changeSet author="andy489" id="48">
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/0/06/BG_Aladzha_monastery_5.jpg"/>
+            <where>id = 10</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="49">
+        <update tableName="comments">
+            <column name="comment" value="Страхотно място за разходка! Харесва ми усещането за спокойствие, което те обхваща веднага щом влезеш в гората. Пътеката е приятна и добре маркирана — минахме я с приятели и всички бяха много доволни. Горещо препоръчвам!"/>
+            <where>id = 2</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="50">
+        <insert tableName="routes">
+            <column name="id" valueNumeric="11"/>
+            <column name="name" value="Кайлъка - Плевен"/>
+            <column name="description" value="Природен парк Кайлъка е красиво горско кътче в непосредствена близост до Плевен, разпростиращо се върху около 600 ха. Паркът е оформен около два живописни язовира — Горен и Долен Кайлъка — и предлага разнообразни маршрути за пешеходци и колоездачи. Пътеките минават през вековни дъбови гори, покрай скалисти бразди и над водните огледала на язовирите. По трасето се срещат множество беседки, чешми и кътове за отдих. Маршрутът описва голям кръг около двата язовира с умерени денивелации — подходящ за цялото семейство. Начална точка е паркинга до входа на парка, откъдето синята маркировка води по добре стъпкани пътеки. Паркът е дом на богато биоразнообразие — диви свине, елени и над 100 вида птици. Ресторант Пещерата, изграден в естествена скална ниша, е задължителна спирка за хапване и отдих."/>
+            <column name="gpx_coordinates" value="kaylaka_pleven_d3f8a1b2-4c9e.xml"/>
+            <column name="level" value="BEGINNER"/>
+            <column name="video_url" value="q1TxA0LSSMU"/>
+            <column name="author_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="51">
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="69"/>
+            <column name="title" value="Кайлъка - двата язовира"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/2/27/Pleven_Kaylaka_two_dams.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="70"/>
+            <column name="title" value="Кайлъка - панорама"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/f/fe/Kailaka.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="71"/>
+            <column name="title" value="Парк Кайлъка"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/b/bf/Park_Kaylaka.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="72"/>
+            <column name="title" value="Кайлъка - зоопарк"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/1/10/Kaylaka_zoo.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="73"/>
+            <column name="title" value="Кайлъка - лагерна барака"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/d/d7/%D0%91%D0%B0%D1%80%D0%B0%D0%BA%D0%B0%D0%9E%D1%82%D0%9B%D0%B0%D0%B3%D0%B5%D1%80%D0%B0%D0%92%D0%9A%D0%B0%D0%B9%D0%BB%D1%8A%D0%BA%D0%B0.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="74"/>
+            <column name="title" value="Ресторант Пещерата - Кайлъка"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/82/%D0%A0%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%D1%82_%D0%9F%D0%B5%D1%89%D0%B5%D1%80%D0%B0%D1%82%D0%B0%2C_%D0%9F%D0%BB%D0%B5%D0%B2%D0%B5%D0%BD%2C_%D0%BC.%D0%9A%D0%B0%D0%B9%D0%BB%D1%8A%D0%BA%D0%B0_-_panoramio.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="75"/>
+            <column name="title" value="Ресторант Пещерата - Кайлъка 2"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/f/f9/%D0%A0%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%D1%82_%D0%9F%D0%B5%D1%89%D0%B5%D1%80%D0%B0%D1%82%D0%B0%2C_%D0%9F%D0%BB%D0%B5%D0%B2%D0%B5%D0%BD%2C_%D0%BC.%D0%9A%D0%B0%D0%B9%D0%BB%D1%8A%D0%BA%D0%B0_-_panoramio_%281%29.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="76"/>
+            <column name="title" value="Ресторант Пещерата - Кайлъка 3"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/6/66/%D0%A0%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%D1%82_%D0%9F%D0%B5%D1%89%D0%B5%D1%80%D0%B0%D1%82%D0%B0-%D0%9A%D0%B0%D0%B9%D0%BB%D1%8A%D0%BA%D0%B0_-_panoramio.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="77"/>
+            <column name="title" value="Механа Кошарите - Кайлъка"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/6/61/%D0%9C%D0%B5%D1%85%D0%B0%D0%BD%D0%B0_%22%D0%9A%D0%BE%D1%88%D0%B0%D1%80%D0%B8%D1%82%D0%B5%22_-_panoramio.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="78"/>
+            <column name="title" value="Кайлъка - квартален изглед"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/85/G.k._Kaylaka%2C_5800_Pleven%2C_Bulgaria_-_panoramio.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="52">
+        <insert tableName="comments">
+            <column name="id" valueNumeric="26"/>
+            <column name="created" valueDate="2024-03-15T09:20:00"/>
+            <column name="modified" valueDate="2024-03-15T09:20:00"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="comment" value="Прекрасна разходка за цялото семейство! Децата се радваха на зоопарка и езерата. Пътеките са добре поддържани и лесни за следване. Задължително спрете на Ресторант Пещерата — храната е чудесна и атмосферата е неповторима."/>
+            <column name="author_id" valueNumeric="4"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="27"/>
+            <column name="created" valueDate="2024-05-01T16:45:00"/>
+            <column name="modified" valueDate="2024-05-01T16:45:00"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="comment" value="Минах маршрута на колело — перфектен за каране! Терена е лек, а гледките към двата язовира са страхотни. Препоръчвам ранна сутрин, когато паркът е тих и само птиците пеят."/>
+            <column name="author_id" valueNumeric="6"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="28"/>
+            <column name="created" valueDate="2024-07-20T11:10:00"/>
+            <column name="modified" valueDate="2024-07-20T11:10:00"/>
+            <column name="approved" valueBoolean="false"/>
+            <column name="comment" value="Хубав парк, но в събота е доста натоварен с хора и автомобили. По-добре посетете в делничен ден. Скалата с орела е забележителна."/>
+            <column name="author_id" valueNumeric="9"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="53">
+        <insert tableName="routes_categories">
+            <column name="route_id" valueNumeric="11"/>
+            <column name="category_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="routes_categories">
+            <column name="route_id" valueNumeric="11"/>
+            <column name="category_id" valueNumeric="4"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="54">
+        <!-- Replace all Kaylaka pictures with scenic lake/park photos and fix video -->
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/6/68/Kaylaka.jpg"/>
+            <column name="title" value="Кайлъка - езерото"/>
+            <where>id = 69</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/4/4a/Kayluka_lake.jpg"/>
+            <column name="title" value="Кайлъка - езерен изглед"/>
+            <where>id = 70</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/7/79/Kayluka_lake_2.jpg"/>
+            <column name="title" value="Кайлъка - есенни цветове"/>
+            <where>id = 71</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/2/27/Pleven_Kaylaka_two_dams.jpg"/>
+            <column name="title" value="Кайлъка - двата язовира от птичи поглед"/>
+            <where>id = 72</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/f/fe/Kailaka.jpg"/>
+            <column name="title" value="Кайлъка - панорама над язовира"/>
+            <where>id = 73</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/b/bf/Park_Kaylaka.jpg"/>
+            <column name="title" value="Парк Кайлъка - горска пътека"/>
+            <where>id = 74</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/6/68/Kaylaka.jpg"/>
+            <column name="title" value="Кайлъка - спокойно езеро"/>
+            <where>id = 75</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/4/4a/Kayluka_lake.jpg"/>
+            <column name="title" value="Кайлъка - отражения в езерото"/>
+            <where>id = 76</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/7/79/Kayluka_lake_2.jpg"/>
+            <column name="title" value="Кайлъка - природен пейзаж"/>
+            <where>id = 77</where>
+        </update>
+        <update tableName="pictures">
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/2/27/Pleven_Kaylaka_two_dams.jpg"/>
+            <column name="title" value="Кайлъка - двата язовира"/>
+            <where>id = 78</where>
+        </update>
+        <update tableName="routes">
+            <column name="video_url" value="tU_4fUm4_C4"/>
+            <where>id = 11</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="55">
+        <!-- Aerial view of the two Kaylaka lakes + switch to best dedicated park tour video -->
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="79"/>
+            <column name="title" value="Кайлъка - двата язовира от въздуха"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/2/27/Pleven_Kaylaka_two_dams.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <update tableName="routes">
+            <column name="video_url" value="2quH6vUzQrs"/>
+            <where>id = 11</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="56">
+        <!-- Route: Леденика пещера, Врачански Балкан -->
+        <insert tableName="routes">
+            <column name="id" valueNumeric="12"/>
+            <column name="name" value="Леденика пещера"/>
+            <column name="description" value="Леденика е една от най-посещаваните пещери в България, намираща се на около 16 км от Враца в природен парк Врачански Балкан. Маршрутът води по горски път от паркинга при селото нагоре до входа на пещерата на 830 м надм. вис. Вътре посетителите се срещат с впечатляващи сталактити, сталагмити и цветни осветени зали. Подходящ за всички сезони, зиме и снежна покривка добавя допълнителна магия на пейзажа."/>
+            <column name="gpx_coordinates" value="ledenika_cave_b5d2e7f1-3a8c.xml"/>
+            <column name="level" value="BEGINNER"/>
+            <column name="video_url" value="bWbPbkhSvjU"/>
+            <column name="author_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="57">
+        <!-- Pictures for route 12: Леденика пещера -->
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="80"/>
+            <column name="title" value="Леденика - вход на пещерата"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/c/c4/Ledenika_cave_001.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="81"/>
+            <column name="title" value="Леденика - сталактитна зала"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/d/dc/Ledenika_cave_002.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="82"/>
+            <column name="title" value="Леденика - подземни образувания"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/3/3e/Ledenika_cave_003.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="83"/>
+            <column name="title" value="Леденика - кристални форми"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/7/77/Ledenika_cave_004.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="84"/>
+            <column name="title" value="Леденика - цветно осветление 1"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/3/39/Ledenika_cave%2C_colour_lights_1.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="85"/>
+            <column name="title" value="Леденика - цветно осветление 2"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/c/c1/Ledenika_cave%2C_colour_lights_2.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="86"/>
+            <column name="title" value="Леденика - цветно осветление 3"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/7/71/Ledenika_cave%2C_colour_lights_3.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="87"/>
+            <column name="title" value="Леденика - централна зала"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/8a/LedenikaCave.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="88"/>
+            <column name="title" value="Врачански Балкан - пейзаж към Леденика"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/3/3a/Vrachanski_balkan_Ledenika.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="89"/>
+            <column name="title" value="Леденика - детайлен изглед"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/5/5c/Ledenika_cave%2C_closer_view_1.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="58">
+        <!-- Comments for route 12: Леденика пещера -->
+        <insert tableName="comments">
+            <column name="id" valueNumeric="29"/>
+            <column name="created" valueDate="2024-06-01T11:00:00"/>
+            <column name="modified" valueDate="2024-06-01T11:00:00"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="comment" value="Страхотна пещера! Осветлението вътре е магично, определено си струва посещението."/>
+            <column name="author_id" valueNumeric="3"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="30"/>
+            <column name="created" valueDate="2024-06-15T14:30:00"/>
+            <column name="modified" valueDate="2024-06-15T14:30:00"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="comment" value="Ходихме с децата, много им хареса. Пътят от паркинга е лесен и приятен."/>
+            <column name="author_id" valueNumeric="5"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="31"/>
+            <column name="created" valueDate="2024-07-20T09:15:00"/>
+            <column name="modified" valueDate="2024-07-20T09:15:00"/>
+            <column name="approved" valueBoolean="false"/>
+            <column name="comment" value="Препоръчвам да се носи по-топло яке, вътре е хладно дори през лятото."/>
+            <column name="author_id" valueNumeric="7"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="59">
+        <!-- Categories for route 12: PEDESTRIAN -->
+        <insert tableName="routes_categories">
+            <column name="route_id" valueNumeric="12"/>
+            <column name="category_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="60">
+        <!-- Route 12: update to INTERMEDIATE, add CAR category, add outdoor gorge/road pictures -->
+        <update tableName="routes">
+            <column name="level" value="INTERMEDIATE"/>
+            <where>id = 12</where>
+        </update>
+        <insert tableName="routes_categories">
+            <column name="route_id" valueNumeric="12"/>
+            <column name="category_id" valueNumeric="3"/>
+        </insert>
+        <!-- Outdoor pictures: gorge road, cliffs, Vrachanski Balkan landscape -->
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="90"/>
+            <column name="title" value="Врацата - пътят през пролома"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/e/e4/Vratsata_gorge.JPG"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="91"/>
+            <column name="title" value="В сърцето на Вратцата"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/3/36/%D0%92_%D1%81%D1%8A%D1%80%D1%86%D0%B5%D1%82%D0%BE_%D0%BD%D0%B0_%D0%92%D1%80%D0%B0%D1%86%D0%B0%D1%82%D0%B0.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="92"/>
+            <column name="title" value="Врачански Балкан - изсечени скали"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/1/11/Vrachanski_balkan_izsecheni_skali.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="93"/>
+            <column name="title" value="Врачански Балкан - пейзаж"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/e/ef/Scenery_in_Vrachanski_Balkan_Nature_Park_-_Outside_Vratsa_-_Bulgaria_-_01_%2828096871357%29.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="94"/>
+            <column name="title" value="Леденика - изглед към пещерата от Враца"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/89/Ledenika_cave_Vratsa.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="61">
+        <!-- Ledenika route pictures: replace cave-heavy set with road/park/gorge images -->
+        <!-- Route: Враца → Врацата клисура → Врачански Балкан → Леденика → пещера -->
+
+        <update tableName="pictures">
+            <column name="title" value="Врацата клисура - пътят през пролома"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/e/e4/Vratsata_gorge.JPG"/>
+            <where>id = 80</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Врачански Балкан - природен парк край Враца"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/e/ef/Scenery_in_Vrachanski_Balkan_Nature_Park_-_Outside_Vratsa_-_Bulgaria_-_01_%2828096871357%29.jpg"/>
+            <where>id = 81</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Врацата пролом - варовикови скали"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/6/64/Vratsata_gorge_%282%29.JPG"/>
+            <where>id = 82</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Проход Вратцата - пътят нагоре"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/0/0a/Prohodvracata.jpg"/>
+            <where>id = 83</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Врачански Балкан - скални стени"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/1/11/Vrachanski_balkan_izsecheni_skali.jpg"/>
+            <where>id = 84</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Горски път към Леденика"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/3/3a/Vrachanski_balkan_Ledenika.jpg"/>
+            <where>id = 85</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Врачански Балкан - панорама"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/b/b0/Vratsa_Balkans.jpg"/>
+            <where>id = 86</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Леденика - входът на пещерата"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/c/c4/Ledenika_cave_001.jpg"/>
+            <where>id = 87</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Леденика - вътрешност на пещерата"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/d/dc/Ledenika_cave_002.jpg"/>
+            <where>id = 88</where>
+        </update>
+
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - поляна при пещерата"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/8/8a/LedenikaCave.jpg"/>
+            <where>id = 89</where>
+        </update>
+
+        <!-- pic 91 was 404 — fix with working gorge image -->
+        <update tableName="pictures">
+            <column name="title" value="Враца - изглед към клисурата"/>
+            <column name="url" value="https://upload.wikimedia.org/wikipedia/commons/e/e4/Vratsata_gorge.JPG"/>
+            <where>id = 91</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="62">
+        <!-- Replace all Ledenika pictures with Cloudinary-hosted images from parkledenika.com/gallery-9/
+             Delete pic 83 (Vrachanski_balkan_pyt - unwanted), 10 outdoor park + 3 cave shots remain -->
+        <delete tableName="pictures">
+            <where>id = 83</where>
+        </delete>
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - горска пътека"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614825/pathfinder/ledenika/ledenika_park_01.jpg"/>
+            <where>id = 80</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - природа"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614828/pathfinder/ledenika/ledenika_park_02.jpg"/>
+            <where>id = 81</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - пейзаж"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614830/pathfinder/ledenika/ledenika_park_03.jpg"/>
+            <where>id = 82</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - гора"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614832/pathfinder/ledenika/ledenika_park_04.jpg"/>
+            <where>id = 84</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - маршрут"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614834/pathfinder/ledenika/ledenika_park_05.jpg"/>
+            <where>id = 85</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - изглед"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614836/pathfinder/ledenika/ledenika_park_06.jpg"/>
+            <where>id = 86</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика парк - природна красота"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614838/pathfinder/ledenika/ledenika_park_07.jpg"/>
+            <where>id = 87</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика - ден 2 по маршрута"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614840/pathfinder/ledenika/ledenika_park_08.jpg"/>
+            <where>id = 88</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика - горска атмосфера"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614842/pathfinder/ledenika/ledenika_park_09.jpg"/>
+            <where>id = 89</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика - природен парк"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614844/pathfinder/ledenika/ledenika_park_10.jpg"/>
+            <where>id = 90</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика пещера - вход"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614846/pathfinder/ledenika/ledenika_cave_01.jpg"/>
+            <where>id = 91</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика пещера - сталактити"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614849/pathfinder/ledenika/ledenika_cave_02.jpg"/>
+            <where>id = 92</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика пещера - зала"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614851/pathfinder/ledenika/ledenika_cave_03.jpg"/>
+            <where>id = 93</where>
+        </update>
+        <update tableName="pictures">
+            <column name="title" value="Леденика - панорамен изглед"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788614854/pathfinder/ledenika/ledenika_park_11.jpg"/>
+            <where>id = 94</where>
+        </update>
+        <!-- Append official park website to route description -->
+        <update tableName="routes">
+            <column name="description" valueComputed="CONCAT(description, ' Официален сайт на парка: https://parkledenika.com')"/>
+            <where>id = 12</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="andy489" id="63">
+        <!-- Add 8 more Ledenika park/outdoor images from parkledenika.com; all hosted on Cloudinary -->
+        <!-- Brings total to 22 pictures: 19 park/route + 3 cave interior -->
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="95"/>
+            <column name="title" value="Леденика парк - горска пътека 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615323/pathfinder/ledenika/ledenika_park_12.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="96"/>
+            <column name="title" value="Леденика парк - природа 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615326/pathfinder/ledenika/ledenika_park_13.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="97"/>
+            <column name="title" value="Леденика парк - пейзаж 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615328/pathfinder/ledenika/ledenika_park_14.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="98"/>
+            <column name="title" value="Леденика парк - маршрут 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615330/pathfinder/ledenika/ledenika_park_15.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="99"/>
+            <column name="title" value="Леденика парк - изглед 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615333/pathfinder/ledenika/ledenika_park_16.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="100"/>
+            <column name="title" value="Леденика парк - ден 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615336/pathfinder/ledenika/ledenika_park_17.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="101"/>
+            <column name="title" value="Леденика парк - гора 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615338/pathfinder/ledenika/ledenika_park_18.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="102"/>
+            <column name="title" value="Леденика парк - панорама"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615341/pathfinder/ledenika/ledenika_park_19.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="64">
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="103"/>
+            <column name="title" value="Леденика парк - панорама 2"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615942/pathfinder/ledenika/ledenika_new_home_eZDfd_1_b.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="104"/>
+            <column name="title" value="Леденика парк - зимен изглед"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615943/pathfinder/ledenika/ledenika_new_home_eZDfd_16_b.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="105"/>
+            <column name="title" value="Леденика - природа по маршрута"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615945/pathfinder/ledenika/ledenika_new_d2-114-1.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="106"/>
+            <column name="title" value="Леденика - горски пейзаж"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615947/pathfinder/ledenika/ledenika_new_d2-109-1.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="107"/>
+            <column name="title" value="Леденика - пролетна гора"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615948/pathfinder/ledenika/ledenika_new_d1-152.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="108"/>
+            <column name="title" value="Леденика - туристическа пътека"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615950/pathfinder/ledenika/ledenika_new_d1-54.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="109"/>
+            <column name="title" value="Леденика - природен резерват"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615952/pathfinder/ledenika/ledenika_new_d1-52.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="110"/>
+            <column name="title" value="Леденика парк - летен изглед"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788615953/pathfinder/ledenika/ledenika_new_home_eZDfd_4_b.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="12"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="65">
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="111"/>
+            <column name="title" value="Кайлъка - залез над езерото"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616216/pathfinder/kaylaka/kaylaka_sunset.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="112"/>
+            <column name="title" value="Кайлъка - пролетен изглед"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616217/pathfinder/kaylaka/kaylaka_spring.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="11"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="66">
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="113"/>
+            <column name="title" value="Рилските езера - панорама"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616573/pathfinder/rila/rila_lakes_01.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="114"/>
+            <column name="title" value="Седемте рилски езера"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616575/pathfinder/rila/rila_lakes_02.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="115"/>
+            <column name="title" value="Рилски езера - изглед"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616577/pathfinder/rila/rila_lakes_03.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="116"/>
+            <column name="title" value="Рилски езера - банер"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616578/pathfinder/rila/rila_lakes_04.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="117"/>
+            <column name="title" value="Рилски езера - цирк"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616579/pathfinder/rila/rila_lakes_05.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="andy489" id="67">
+        <delete tableName="pictures">
+            <where>id = 117</where>
+        </delete>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="118"/>
+            <column name="title" value="Рилски езера - панорама на цирка"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616877/pathfinder/rila/rila_lakes_06.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="119"/>
+            <column name="title" value="Рилски езера - цирк панорама"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616878/pathfinder/rila/rila_lakes_07.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="pictures">
+            <column name="id" valueNumeric="120"/>
+            <column name="title" value="Седемте рилски езера - аерофото"/>
+            <column name="url" value="https://res.cloudinary.com/dmpzzernt/image/upload/v1788616879/pathfinder/rila/rila_lakes_08.jpg"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="route_id" valueNumeric="10"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="68" author="andy489">
+        <update tableName="routes">
+            <column name="name" value="Витоша - Боянски водопад"/>
+            <column name="description" value="Живописна пешеходна пътека до Боянския водопад в подножието на Витоша, на само няколко километра от центъра на София. Маршрутът минава през гъста букова гора покрай поток и стига до красив водопад с височина около 15 метра. Подходящ за семейни излети и разходки сред природата. Препоръчително е да се носят удобни обувки за ходене, тъй като пътеката може да е хлъзгава след дъжд."/>
+            <where>id = 9</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="69" author="andy489">
+        <update tableName="routes">
+            <column name="video_url" value="plx18W9Z_D0"/>
+            <where>id = 10</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="70" author="andy489">
+        <update tableName="routes">
+            <column name="description" value="Цикълът на Рилските езера е един от най-красивите и посещавани планински маршрути в България. Трасето обхваща всички Седем рилски езера — Сълзата, Окото, Бъбрека, Близнака, Трилистника, Рибното езеро и Долното — наредени на различни нива между 2095 и 2535 метра надморска височина. Маршрутът предлага зашеметяващи алпийски гледки, кристално чисти езерни огледала и разнообразен планински терен. Пътеката е ясно маркирана и подходяща за хора с умерена физическа подготовка, но изисква добри обувки и подходящо облекло поради бързо променящото се планинско време. Препоръчителният сезон е от юли до септември. Изходните точки са лифтът от Паничище или заслон Рилски езера. Общата дължина на цикъла е около 6 км с денивелация около 480 м."/>
+            <where>id = 10</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="71" author="andy489">
+        <update tableName="routes">
+            <column name="name" value="Витоша - Боянски водопад"/>
+            <column name="description" value="Живописна пешеходна пътека до Боянския водопад в подножието на Витоша, на само няколко километра от центъра на София. Маршрутът минава през гъста букова гора покрай поток и стига до красив водопад с височина около 15 метра. Подходящ за семейни излети и разходки сред природата. Препоръчително е да се носят удобни обувки за ходене, тъй като пътеката може да е хлъзгава след дъжд. Разстоянието е около 3 км в едната посока с минимална денивелация от около 120 м. Изходна точка е квартал Бояна в София — удобен паркинг при Боянската църква."/>
+            <where>id = 9</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="72" author="andy489">
+        <update tableName="routes">
+            <column name="description" value="Леденика е една от най-посещаваните пещери в България, намираща се на около 16 км от Враца в природен парк Врачански Балкан. Маршрутът води по горски път от паркинга при селото нагоре до входа на пещерата на 830 м надм. вис. Вътре посетителите се срещат с впечатляващи сталактити, сталагмити и цветни осветени зали. Подходящ за всички сезони — зиме снежната покривка добавя допълнителна магия на пейзажа. Официален сайт на парка: parkledenika.com"/>
+            <where>id = 12</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="73" author="andy489">
+        <update tableName="routes">
+            <column name="video_url" value="E2opaOC-d4k"/>
+            <where>id = 9</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="74" author="andy489">
+        <insert tableName="comments">
+            <column name="id" value="32"/>
+            <column name="comment" value="Чудесен маршрут за начинаещи! Тръгнахме от хижа Кумата рано сутринта и стигнахме върха за малко под 2 часа. Гледката е невероятна."/>
+            <column name="created" valueDate="now()"/>
+            <column name="modified" valueDate="now()"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="author_id" value="5"/>
+            <column name="route_id" value="1"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" value="33"/>
+            <column name="comment" value="Правихме го с децата — лесен и приятен преход. Соколският манастир по пътя е задължителна спирка. Препоръчвам!"/>
+            <column name="created" valueDate="now()"/>
+            <column name="modified" valueDate="now()"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="author_id" value="3"/>
+            <column name="route_id" value="4"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" value="34"/>
+            <column name="comment" value="Фантастично място! Реката, пещерите и скалните пирамиди са нещо неповторимо. Задължително с колата до пролома и после пеша."/>
+            <column name="created" valueDate="now()"/>
+            <column name="modified" valueDate="now()"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="author_id" value="7"/>
+            <column name="route_id" value="6"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" value="35"/>
+            <column name="comment" value="Перфектна разходка за следобед! От Боянската църква до водопада отиде ни около 40 минути. Пътеката е хубава, но след дъжд е хлъзгава — носете добри обувки."/>
+            <column name="created" valueDate="now()"/>
+            <column name="modified" valueDate="now()"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="author_id" value="9"/>
+            <column name="route_id" value="9"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" value="36"/>
+            <column name="comment" value="Едно от най-красивите места в България! Направихме целия цикъл за около 4 часа с почивки. Езерото Окото е невероятно. Препоръчвам ранно тръгване, защото следобед се събират облаци."/>
+            <column name="created" valueDate="now()"/>
+            <column name="modified" valueDate="now()"/>
+            <column name="approved" valueBoolean="true"/>
+            <column name="author_id" value="10"/>
+            <column name="route_id" value="10"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

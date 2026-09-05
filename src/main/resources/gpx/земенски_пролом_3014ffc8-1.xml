@@ -1,20 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="J!Track Gallery - http://jtrackgallery.net/forum" version="1.1"
-     xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version='1.0' encoding='UTF-8'?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" creator="J!Track Gallery - http://jtrackgallery.net/forum" version="1.1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
     <metadata>
         <name>Земенски пролом</name>
-        <copyright author="Bulgarian Mountains"/>
+        <copyright author="Bulgarian Mountains" />
         <link href="https://bgmountains.org/index.php?option=com_jtg&amp;view=track&amp;layout=track&amp;id=56">
             <text>Земенски пролом on Bulgarian Mountains</text>
         </link>
         <time>2021-07-04T06:23:26Z</time>
-        <bounds minlat="22.684957003" minlon="42.412802037" maxlat="22.748129983"
-                maxlon="42.48114204"/>
+        <bounds minlat="42.412802" minlon="22.684957" maxlat="42.481142" maxlon="22.748130" />
     </metadata>
     <trk>
         <name>Земенски пролом</name>
-        <link href="https://bgmountains.org/index.php?option=com_jtg&amp;view=track&amp;layout=track&amp;id=56"/>
+        <link href="https://bgmountains.org/index.php?option=com_jtg&amp;view=track&amp;layout=track&amp;id=56" />
         <number>117</number>
         <trkseg>
             <trkpt lat="42.480738033" lon="22.748039961">
@@ -1253,7 +1250,7 @@
                 <ele>563.47</ele>
                 <time>2011-10-22T07:20:39Z</time>
             </trkpt>
-            <trkpt lat="42.423875034" lon="22.700936012">
+            <trkpt lat="42.425661" lon="22.701794"><ele>563.2</ele></trkpt><trkpt lat="42.423875034" lon="22.700936012">
                 <ele>562.99</ele>
                 <time>2011-10-22T07:25:34Z</time>
             </trkpt>
@@ -1825,7 +1822,7 @@
                 <ele>573.56</ele>
                 <time>2011-10-22T08:50:42Z</time>
             </trkpt>
-            <trkpt lat="42.427527029" lon="22.702669976">
+            <trkpt lat="42.425622" lon="22.701657"><ele>573.8</ele></trkpt><trkpt lat="42.427527029" lon="22.702669976">
                 <ele>574.04</ele>
                 <time>2011-10-22T08:56:01Z</time>
             </trkpt>

@@ -1,11 +1,10 @@
 package com.pathfinder.service;
 
+import com.pathfinder.exception.RouteNotFoundException;
 import com.pathfinder.mapper.MapStructMapper;
-import com.pathfinder.model.dto.RouteCommentDto;
 import com.pathfinder.model.dto.RouteCommentsPartitionDto;
 import com.pathfinder.model.dto.UserPermissionsDetailsDto;
 import com.pathfinder.model.entity.CommentEntity;
-import com.pathfinder.model.entity.GenericEntity;
 import com.pathfinder.model.entity.RoleEntity;
 import com.pathfinder.model.entity.RouteEntity;
 import com.pathfinder.model.entity.UserEntity;
@@ -13,20 +12,21 @@ import com.pathfinder.model.enumerated.UserRoleEnum;
 import com.pathfinder.model.view.AdminCommentView;
 import com.pathfinder.model.view.AdminUsersView;
 import com.pathfinder.model.view.CommentView;
+import com.pathfinder.repository.CommentRepository;
 import com.pathfinder.repository.RoleRepository;
 import com.pathfinder.repository.RouteRepository;
 import com.pathfinder.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
-
-import static java.util.stream.Collectors.toMap;
 
 @Service
 public class SuperuserService {
@@ -37,94 +37,81 @@ public class SuperuserService {
 
     private final RoleRepository roleRepository;
 
+    private final CommentRepository commentRepository;
+
     private final MapStructMapper mapper;
 
     public SuperuserService(RouteRepository routeRepository, UserRepository userRepository,
-                            RoleRepository roleRepository, MapStructMapper mapper) {
-
+                            RoleRepository roleRepository, CommentRepository commentRepository,
+                            MapStructMapper mapper) {
         this.routeRepository = routeRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.commentRepository = commentRepository;
         this.mapper = mapper;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AdminCommentView getRouteComments() {
+        List<RouteEntity> all = routeRepository.findAllWithComments();
 
-        List<RouteEntity> all = routeRepository.findAll();
+        long approvedCount = 0;
+        long newCount = 0;
+        Map<String, RouteCommentsPartitionDto> routeComments = new TreeMap<>();
 
-        Map<String, RouteCommentsPartitionDto> collect = all.stream()
-                .map(r -> {
-                    Long routeId = r.getId();
-                    String routeName = r.getName();
+        for (RouteEntity r : all) {
+            List<CommentView> approved = new java.util.ArrayList<>();
+            List<CommentView> pending = new java.util.ArrayList<>();
 
-                    List<CommentView> newComments = r.getComments().stream().filter(c -> !c.getApproved())
-                            .map(mapper::toView)
-                            .sorted(Comparator.comparing(CommentView::getCreated, Comparator.reverseOrder()))
-                            .toList();
+            for (CommentEntity c : r.getComments()) {
+                CommentView view = mapper.toView(c);
+                if (Boolean.TRUE.equals(c.getApproved())) {
+                    approved.add(view);
+                    approvedCount++;
+                } else {
+                    pending.add(view);
+                    newCount++;
+                }
+            }
 
-                    List<CommentView> approvedComments = r.getComments().stream().filter(CommentEntity::getApproved)
-                            .map(mapper::toView)
-                            .sorted(Comparator.comparing(CommentView::getCreated, Comparator.reverseOrder()))
-                            .toList();
+            approved.sort(Comparator.comparing(CommentView::getCreated, Comparator.reverseOrder()));
+            pending.sort(Comparator.comparing(CommentView::getCreated, Comparator.reverseOrder()));
 
-                    RouteCommentsPartitionDto routeCommentsPartitionDto =
-                            new RouteCommentsPartitionDto(routeId, approvedComments, newComments);
+            routeComments.put(r.getName(), new RouteCommentsPartitionDto(r.getId(), approved, pending));
+        }
 
-                    return new RouteCommentDto(routeName, routeCommentsPartitionDto);
-                }).collect(toMap(RouteCommentDto::routeName, RouteCommentDto::routeCommentsPartitionDto));
-
-
-        long approvedCommentsCount = all.stream()
-                .flatMap(r -> r.getComments().stream())
-                .filter(CommentEntity::getApproved)
-                .count();
-
-        long newCommentsCount = all.stream()
-                .flatMap(r -> r.getComments().stream())
-                .filter(c -> !c.getApproved())
-                .count();
-
-
-        return new AdminCommentView().setNewCommentsCount(newCommentsCount)
-                .setApprovedCommentsCount(approvedCommentsCount)
-                .setRouteComments(collect);
+        return new AdminCommentView()
+                .setNewCommentsCount(newCount)
+                .setApprovedCommentsCount(approvedCount)
+                .setRouteComments(routeComments);
     }
 
     @Transactional
     public List<Long> deleteAllRouteComments(Long routeId, Boolean approved) {
-
-        RouteEntity referenceById = routeRepository.getReferenceById(routeId);
-
-        List<CommentEntity> toRemove = referenceById.getComments().stream()
-                .filter(c -> c.getApproved().equals(approved))
-                .toList();
-
-        toRemove.forEach(referenceById.getComments()::remove);
-
-        return toRemove.stream().map(GenericEntity::getId).toList();
+        List<Long> ids = commentRepository.findIdsByRouteIdAndApproved(routeId, approved);
+        commentRepository.deleteByRouteIdAndApproved(routeId, approved);
+        return ids;
     }
 
     @Transactional
     public List<Long> approveRejAllRouteComments(Long routeId, Boolean approved) {
+        RouteEntity route = routeRepository.findById(routeId)
+                .orElseThrow(() -> new RouteNotFoundException("Route not found: " + routeId));
 
-        RouteEntity referenceById = routeRepository.getReferenceById(routeId);
+        List<Long> ids = new ArrayList<>();
+        route.getComments().stream()
+                .filter(c -> Objects.equals(c.getApproved(), approved))
+                .forEach(c -> {
+                    c.toggleApprove();
+                    ids.add(c.getId());
+                });
 
-        List<Long> toToggleIds = referenceById.getComments().stream()
-                .filter(c -> c.getApproved().equals(approved))
-                .map(CommentEntity::getId)
-                .toList();
-
-        referenceById.getComments().stream()
-                .filter(c -> c.getApproved().equals(approved))
-                .forEach(CommentEntity::toggleApprove);
-
-        return toToggleIds;
+        return ids;
     }
 
+    @Transactional(readOnly = true)
     public AdminUsersView getUserRoles() {
-
-        List<UserEntity> all = userRepository.findAll();
+        List<UserEntity> all = userRepository.findAllWithRoles();
 
         List<UserPermissionsDetailsDto> admins = extractUsers(all, UserRoleEnum.ADMIN);
         List<UserPermissionsDetailsDto> moderators = extractUsers(all, UserRoleEnum.MODERATOR);
@@ -149,7 +136,6 @@ public class SuperuserService {
 
             for (RoleEntity role : roles) {
                 UserRoleEnum roleEnum = role.getRole();
-
                 if (roleEnum.equals(UserRoleEnum.ADMIN)) {
                     isAdmin = true;
                 } else if (roleEnum.equals(UserRoleEnum.MODERATOR)) {
@@ -158,31 +144,16 @@ public class SuperuserService {
             }
 
             return switch (userRoleEnum) {
-                case ADMIN -> filterAdmin(isModerator, isAdmin);
-                case MODERATOR -> filterModerator(isModerator, isAdmin);
-                case REGULAR -> filterUser(isModerator, isAdmin);
+                case ADMIN -> isAdmin;
+                case MODERATOR -> isModerator && !isAdmin;
+                case REGULAR -> !isModerator && !isAdmin;
             };
-
         }).map(mapper::toUserPermissionsDetailsDto).toList();
-    }
-
-    private boolean filterAdmin(boolean isModerator, boolean isAdmin) {
-        return isAdmin;
-    }
-
-    private boolean filterModerator(boolean isModerator, boolean isAdmin) {
-        return isModerator && !isAdmin;
-    }
-
-    private boolean filterUser(boolean isModerator, boolean isAdmin) {
-        return !isModerator && !isAdmin;
     }
 
     @Transactional
     public void togglePermUser(Long userId, UserRoleEnum from, UserRoleEnum to) {
-
         UserEntity referenceById = userRepository.getReferenceById(userId);
-
 
         if (referenceById.containsRole(from)) {
             referenceById.remove(from);

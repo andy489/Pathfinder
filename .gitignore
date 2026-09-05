@@ -40,7 +40,7 @@ settings.gradle
 .idea
 out/
 
-# Claude Code
+# IDE / editor metadata
 .claude/
 
 ### Environment Files ###
